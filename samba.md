@@ -9,7 +9,7 @@
   - 2.  
   - 3.  
 
-## /etc/fstab
+## /etc/fstab 
 - [ ] **Main Goal:** *(The most important thing to achieve today)*
 - [ ] **Secondary Goals:**  
   - [ ]  
