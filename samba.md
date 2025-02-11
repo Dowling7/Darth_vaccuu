@@ -1,13 +1,86 @@
-# Mounting a windows folder on Linux machine, and routinely update
+# Remote access via samba
+Author: Dwong 
+Laste edited: Feb 10, 2025  
+Initialized: Feb 10, 2025  
+- **Linux server side:** 
+  - On the server side machine:
+  ```bash
+  sudo apt update
+  sudo apt install samba
+  ```
 
-## Mounting a windows directory via samba
-- **Mood:** 😀😐😞
-- **Sleep Quality:** 💤💤💤 (Rate: 1-5)
-- **Dreams:** *(Any memorable dreams?)*  
-- **Gratitude List:**  
-  - 1.  
-  - 2.  
-  - 3.  
+  ```bash
+  sudo mkdir -p /srv/samba/shared
+  ```
+  Adjust permissions: Ensure the folder has appropriate permissions for the users who will access it:
+  ```bash
+  sudo chown -R nobody:nogroup /srv/samba/shared
+  sudo chmod -R 0777 /srv/samba/shared
+  ```
+  
+  ```bash
+  sudo nano /etc/samba/smb.conf
+
+  [SharedFolder]
+  path = /srv/samba/shared
+  browseable = yes
+  writable = yes
+  guest ok = yes
+  read only = no
+
+  ```
+  Make sure Samba (smbd and nmbd) is enabled at boot and running:
+  ```bash
+  sudo systemctl enable smb nmb
+  sudo systemctl start smb nmb
+  ```
+  Open the firwalls: Samba typically uses TCP ports 139 and 445, and UDP ports 137 and 138. Port 22 usually is for ssh
+  ```bash
+  sudo ufw allow samba
+  ```
+
+
+- **Linux client side:** 
+  ```bash
+  sudo apt update
+  sudo apt install cifs-utils
+
+  ```
+  ```bash
+  sudo mkdir -p /mnt/windows_share
+
+  ```
+  ```bash
+  sudo mount -t cifs -o credentials=/etc/samba/keyence  //192.168.13.89/IMSeriesShared /mnt/win_share
+  ls /mnt/win_share/
+  sudo umount /mnt/win_share/
+  EDITOR=vim sudoedit /etc/fstab 
+  sudo mount /mnt/win_share/ 
+  ```
+  find the correcsponding local mounting point entry. edit fstab. systemctl daemon-reload only change what systemctl has read, not really do the operation of mounting. 
+  ```
+  ```bash
+  sudo ufw allow samba
+  ```
+
+
+## Tips
+ - TCP port 22 is the default port used by SSH (Secure Shell)
+ - dmesg displays the messages from the kernel’s ring buffer. The kernel ring buffer is an in-memory log where the Linux kernel writes messages about hardware, drivers, and other low-level system components.
+  - cat to view text file
+  - Text file in linux doesn't need an extension
+  - EDITOR=vim sudoedit /etc/fstab 
+  - crontab: time-based job scheduler
+  ```bash
+    MINUTE  HOUR  DAY_OF_MONTH  MONTH  DAY_OF_WEEK  COMMAND
+    MINUTE: 0–59
+    HOUR: 0–23
+    DAY_OF_MONTH: 1–31
+    MONTH: 1–12 (or short names like jan, feb, …)
+    DAY_OF_WEEK: 0–7 (where 0 or 7 is Sunday, or short names sun, mon, etc.)
+    COMMAND: The actual command/script you want to run
+  ```
+
 
 ## /etc/fstab 
 - [ ] **Main Goal:** *(The most important thing to achieve today)*
