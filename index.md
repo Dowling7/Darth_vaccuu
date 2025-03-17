@@ -1,13 +1,11 @@
 # Welcome to the Robotics Section
 
-Explore the fascinating world of robotics, where science meets engineering to create intelligent machines!
-
+This is a hobby project for robotics system learning.
+there are two hardware and software platforms
 ## Topics Covered
-- [Automation in Robotics](automation.md)
-- [Artificial Intelligence in Robotics](ai-in-robotics.md)
-- [Mechanical Design in Robotics](mechanical-design.md)
-- [Control Systems](control-systems.md)
-- [Sensors and Actuators](sensors-actuators.md)
+- [Neato and ROS2](automation.md)
+- [Roomba with pyrobot](ai-in-robotics.md)
+- [Depth camera, semantic segmantation](mechanical-design.md)
 
 ## What is Robotics?
 Robotics is a multidisciplinary field that integrates computer science, engineering, and mathematics to design, build, and operate robots.

@@ -1,0 +1,1419 @@
+
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<link rel="profile" href="https://gmpg.org/xfn/11">
+	<title>Roomberry Surveillance Robot: Roomba + Raspberry Pi Zero W + Camera</title>
+
+<!-- This site is optimized with the Yoast SEO plugin v12.2 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="description" content="In this post you will see how to build a surveillance robot with a Roomba series 700 using a Raspberry Pi Zero W and a compatible camera."/>
+<meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1"/>
+<link rel="canonical" href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="Roomberry Surveillance Robot: Roomba + Raspberry Pi Zero W + Camera" />
+<meta property="og:description" content="In this post you will see how to build a surveillance robot with a Roomba series 700 using a Raspberry Pi Zero W and a compatible camera." />
+<meta property="og:url" content="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/" />
+<meta property="og:site_name" content="Domotic Project" />
+<meta property="article:tag" content="iRobot" />
+<meta property="article:tag" content="picamera" />
+<meta property="article:tag" content="Raspberry PI Zero W" />
+<meta property="article:tag" content="Roomba" />
+<meta property="article:section" content="Roomba" />
+<meta property="article:published_time" content="2018-08-14T19:19:01+02:00" />
+<meta property="article:modified_time" content="2019-03-20T11:27:53+01:00" />
+<meta property="og:updated_time" content="2019-03-20T11:27:53+01:00" />
+<meta property="og:image" content="https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View.jpg" />
+<meta property="og:image:secure_url" content="https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View.jpg" />
+<meta property="og:image:width" content="1198" />
+<meta property="og:image:height" content="898" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:description" content="In this post you will see how to build a surveillance robot with a Roomba series 700 using a Raspberry Pi Zero W and a compatible camera." />
+<meta name="twitter:title" content="Roomberry Surveillance Robot: Roomba + Raspberry Pi Zero W + Camera" />
+<meta name="twitter:image" content="https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View.jpg" />
+<script type='application/ld+json' class='yoast-schema-graph yoast-schema-graph--main'>{"@context":"https://schema.org","@graph":[{"@type":["Person","Organization"],"@id":"https://domoticproject.com/#/schema/person/ca3a5366d7b00c92eb3960e49aa80cd9","name":"dani","image":{"@type":"ImageObject","@id":"https://domoticproject.com/#personlogo","url":"https://secure.gravatar.com/avatar/204a85ec17c6bd1d6313c5878495ef07?s=96&r=g","caption":"dani"},"logo":{"@id":"https://domoticproject.com/#personlogo"},"description":"My name is Dani and I like messing around with everything that has buttons and/or electricity. In this blog I will share my findings building a DIY domotic system based on a Raspberry Pi.","sameAs":[]},{"@type":"WebSite","@id":"https://domoticproject.com/#website","url":"https://domoticproject.com/","name":"Domotic Project","publisher":{"@id":"https://domoticproject.com/#/schema/person/ca3a5366d7b00c92eb3960e49aa80cd9"},"potentialAction":{"@type":"SearchAction","target":"https://domoticproject.com/?s={search_term_string}","query-input":"required name=search_term_string"}},{"@type":"ImageObject","@id":"https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#primaryimage","url":"https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View.jpg","width":1198,"height":898},{"@type":"WebPage","@id":"https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#webpage","url":"https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/","inLanguage":"en-US","name":"Roomberry Surveillance Robot: Roomba + Raspberry Pi Zero W + Camera","isPartOf":{"@id":"https://domoticproject.com/#website"},"primaryImageOfPage":{"@id":"https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#primaryimage"},"datePublished":"2018-08-14T19:19:01+02:00","dateModified":"2019-03-20T11:27:53+01:00","description":"In this post you will see how to build a surveillance robot with a Roomba series 700 using a Raspberry Pi Zero W and a compatible camera."},{"@type":"Article","@id":"https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#article","isPartOf":{"@id":"https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#webpage"},"author":{"@id":"https://domoticproject.com/#/schema/person/ca3a5366d7b00c92eb3960e49aa80cd9"},"headline":"Roomberry Surveillance Robot: Roomba + Raspberry Pi Zero W + Camera","datePublished":"2018-08-14T19:19:01+02:00","dateModified":"2019-03-20T11:27:53+01:00","commentCount":13,"mainEntityOfPage":{"@id":"https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#webpage"},"publisher":{"@id":"https://domoticproject.com/#/schema/person/ca3a5366d7b00c92eb3960e49aa80cd9"},"image":{"@id":"https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#primaryimage"},"keywords":"iRobot,picamera,Raspberry PI Zero W,Roomba","articleSection":"Raspberry,Roomba,Web Server"}]}</script>
+<!-- / Yoast SEO plugin. -->
+
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link href='https://fonts.gstatic.com' crossorigin rel='preconnect' />
+<link rel="alternate" type="application/rss+xml" title="Domotic Project &raquo; Feed" href="https://domoticproject.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Domotic Project &raquo; Comments Feed" href="https://domoticproject.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Domotic Project &raquo; Roomberry Surveillance Robot: Roomba + Raspberry Pi Zero W + Camera Comments Feed" href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/feed/" />
+		<!-- This site uses the Google Analytics by MonsterInsights plugin v8.14.1 - Using Analytics tracking - https://www.monsterinsights.com/ -->
+							<script src="//www.googletagmanager.com/gtag/js?id=UA-109186450-1"  data-cfasync="false" data-wpfc-render="false" type="text/javascript" async></script>
+			<script data-cfasync="false" data-wpfc-render="false" type="text/javascript">
+				var mi_version = '8.14.1';
+				var mi_track_user = true;
+				var mi_no_track_reason = '';
+				
+								var disableStrs = [
+															'ga-disable-UA-109186450-1',
+									];
+
+				/* Function to detect opted out users */
+				function __gtagTrackerIsOptedOut() {
+					for (var index = 0; index < disableStrs.length; index++) {
+						if (document.cookie.indexOf(disableStrs[index] + '=true') > -1) {
+							return true;
+						}
+					}
+
+					return false;
+				}
+
+				/* Disable tracking if the opt-out cookie exists. */
+				if (__gtagTrackerIsOptedOut()) {
+					for (var index = 0; index < disableStrs.length; index++) {
+						window[disableStrs[index]] = true;
+					}
+				}
+
+				/* Opt-out function */
+				function __gtagTrackerOptout() {
+					for (var index = 0; index < disableStrs.length; index++) {
+						document.cookie = disableStrs[index] + '=true; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/';
+						window[disableStrs[index]] = true;
+					}
+				}
+
+				if ('undefined' === typeof gaOptout) {
+					function gaOptout() {
+						__gtagTrackerOptout();
+					}
+				}
+								window.dataLayer = window.dataLayer || [];
+
+				window.MonsterInsightsDualTracker = {
+					helpers: {},
+					trackers: {},
+				};
+				if (mi_track_user) {
+					function __gtagDataLayer() {
+						dataLayer.push(arguments);
+					}
+
+					function __gtagTracker(type, name, parameters) {
+						if (!parameters) {
+							parameters = {};
+						}
+
+						if (parameters.send_to) {
+							__gtagDataLayer.apply(null, arguments);
+							return;
+						}
+
+						if (type === 'event') {
+							
+														parameters.send_to = monsterinsights_frontend.ua;
+							__gtagDataLayer(type, name, parameters);
+													} else {
+							__gtagDataLayer.apply(null, arguments);
+						}
+					}
+
+					__gtagTracker('js', new Date());
+					__gtagTracker('set', {
+						'developer_id.dZGIzZG': true,
+											});
+															__gtagTracker('config', 'UA-109186450-1', {"forceSSL":"true"} );
+										window.gtag = __gtagTracker;										(function () {
+						/* https://developers.google.com/analytics/devguides/collection/analyticsjs/ */
+						/* ga and __gaTracker compatibility shim. */
+						var noopfn = function () {
+							return null;
+						};
+						var newtracker = function () {
+							return new Tracker();
+						};
+						var Tracker = function () {
+							return null;
+						};
+						var p = Tracker.prototype;
+						p.get = noopfn;
+						p.set = noopfn;
+						p.send = function () {
+							var args = Array.prototype.slice.call(arguments);
+							args.unshift('send');
+							__gaTracker.apply(null, args);
+						};
+						var __gaTracker = function () {
+							var len = arguments.length;
+							if (len === 0) {
+								return;
+							}
+							var f = arguments[len - 1];
+							if (typeof f !== 'object' || f === null || typeof f.hitCallback !== 'function') {
+								if ('send' === arguments[0]) {
+									var hitConverted, hitObject = false, action;
+									if ('event' === arguments[1]) {
+										if ('undefined' !== typeof arguments[3]) {
+											hitObject = {
+												'eventAction': arguments[3],
+												'eventCategory': arguments[2],
+												'eventLabel': arguments[4],
+												'value': arguments[5] ? arguments[5] : 1,
+											}
+										}
+									}
+									if ('pageview' === arguments[1]) {
+										if ('undefined' !== typeof arguments[2]) {
+											hitObject = {
+												'eventAction': 'page_view',
+												'page_path': arguments[2],
+											}
+										}
+									}
+									if (typeof arguments[2] === 'object') {
+										hitObject = arguments[2];
+									}
+									if (typeof arguments[5] === 'object') {
+										Object.assign(hitObject, arguments[5]);
+									}
+									if ('undefined' !== typeof arguments[1].hitType) {
+										hitObject = arguments[1];
+										if ('pageview' === hitObject.hitType) {
+											hitObject.eventAction = 'page_view';
+										}
+									}
+									if (hitObject) {
+										action = 'timing' === arguments[1].hitType ? 'timing_complete' : hitObject.eventAction;
+										hitConverted = mapArgs(hitObject);
+										__gtagTracker('event', action, hitConverted);
+									}
+								}
+								return;
+							}
+
+							function mapArgs(args) {
+								var arg, hit = {};
+								var gaMap = {
+									'eventCategory': 'event_category',
+									'eventAction': 'event_action',
+									'eventLabel': 'event_label',
+									'eventValue': 'event_value',
+									'nonInteraction': 'non_interaction',
+									'timingCategory': 'event_category',
+									'timingVar': 'name',
+									'timingValue': 'value',
+									'timingLabel': 'event_label',
+									'page': 'page_path',
+									'location': 'page_location',
+									'title': 'page_title',
+								};
+								for (arg in args) {
+																		if (!(!args.hasOwnProperty(arg) || !gaMap.hasOwnProperty(arg))) {
+										hit[gaMap[arg]] = args[arg];
+									} else {
+										hit[arg] = args[arg];
+									}
+								}
+								return hit;
+							}
+
+							try {
+								f.hitCallback();
+							} catch (ex) {
+							}
+						};
+						__gaTracker.create = newtracker;
+						__gaTracker.getByName = newtracker;
+						__gaTracker.getAll = function () {
+							return [];
+						};
+						__gaTracker.remove = noopfn;
+						__gaTracker.loaded = true;
+						window['__gaTracker'] = __gaTracker;
+					})();
+									} else {
+										console.log("");
+					(function () {
+						function __gtagTracker() {
+							return null;
+						}
+
+						window['__gtagTracker'] = __gtagTracker;
+						window['gtag'] = __gtagTracker;
+					})();
+									}
+			</script>
+				<!-- / Google Analytics by MonsterInsights -->
+				<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.0.1\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/13.0.1\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/domoticproject.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=5.6.10"}};
+			!function(e,a,t){var n,r,o,i=a.createElement("canvas"),p=i.getContext&&i.getContext("2d");function s(e,t){var a=String.fromCharCode;p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,e),0,0);e=i.toDataURL();return p.clearRect(0,0,i.width,i.height),p.fillText(a.apply(this,t),0,0),e===i.toDataURL()}function c(e){var t=a.createElement("script");t.src=e,t.defer=t.type="text/javascript",a.getElementsByTagName("head")[0].appendChild(t)}for(o=Array("flag","emoji"),t.supports={everything:!0,everythingExceptFlag:!0},r=0;r<o.length;r++)t.supports[o[r]]=function(e){if(!p||!p.fillText)return!1;switch(p.textBaseline="top",p.font="600 32px Arial",e){case"flag":return s([127987,65039,8205,9895,65039],[127987,65039,8203,9895,65039])?!1:!s([55356,56826,55356,56819],[55356,56826,8203,55356,56819])&&!s([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]);case"emoji":return!s([55357,56424,8205,55356,57212],[55357,56424,8203,55356,57212])}return!1}(o[r]),t.supports.everything=t.supports.everything&&t.supports[o[r]],"flag"!==o[r]&&(t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&t.supports[o[r]]);t.supports.everythingExceptFlag=t.supports.everythingExceptFlag&&!t.supports.flag,t.DOMReady=!1,t.readyCallback=function(){t.DOMReady=!0},t.supports.everything||(n=function(){t.readyCallback()},a.addEventListener?(a.addEventListener("DOMContentLoaded",n,!1),e.addEventListener("load",n,!1)):(e.attachEvent("onload",n),a.attachEvent("onreadystatechange",function(){"complete"===a.readyState&&t.readyCallback()})),(n=t.source||{}).concatemoji?c(n.concatemoji):n.wpemoji&&n.twemoji&&(c(n.twemoji),c(n.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+	<link rel='stylesheet' id='twb-open-sans-css'  href='https://fonts.googleapis.com/css?family=Open+Sans%3A300%2C400%2C500%2C600%2C700%2C800&#038;display=swap&#038;ver=5.6.10' type='text/css' media='all' />
+<link rel='stylesheet' id='twbbwg-global-css'  href='https://domoticproject.com/wp-content/plugins/photo-gallery/booster/assets/css/global.css?ver=1.0.0' type='text/css' media='all' />
+<link rel='stylesheet' id='generate-fonts-css'  href='//fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,regular,italic,500,500italic,700,700italic,900,900italic' type='text/css' media='all' />
+<link rel='stylesheet' id='wp-block-library-css'  href='https://domoticproject.com/wp-includes/css/dist/block-library/style.min.css?ver=5.6.10' type='text/css' media='all' />
+<link rel='stylesheet' id='bwg_fonts-css'  href='https://domoticproject.com/wp-content/plugins/photo-gallery/css/bwg-fonts/fonts.css?ver=0.0.1' type='text/css' media='all' />
+<link rel='stylesheet' id='sumoselect-css'  href='https://domoticproject.com/wp-content/plugins/photo-gallery/css/sumoselect.min.css?ver=3.4.6' type='text/css' media='all' />
+<link rel='stylesheet' id='mCustomScrollbar-css'  href='https://domoticproject.com/wp-content/plugins/photo-gallery/css/jquery.mCustomScrollbar.min.css?ver=3.1.5' type='text/css' media='all' />
+<link rel='stylesheet' id='bwg_googlefonts-css'  href='https://fonts.googleapis.com/css?family=Ubuntu&#038;subset=greek,latin,greek-ext,vietnamese,cyrillic-ext,latin-ext,cyrillic' type='text/css' media='all' />
+<link rel='stylesheet' id='bwg_frontend-css'  href='https://domoticproject.com/wp-content/plugins/photo-gallery/css/styles.min.css?ver=1.8.14' type='text/css' media='all' />
+<link rel='stylesheet' id='toc-screen-css'  href='https://domoticproject.com/wp-content/plugins/table-of-contents-plus/screen.min.css?ver=2302' type='text/css' media='all' />
+<link rel='stylesheet' id='generate-style-grid-css'  href='https://domoticproject.com/wp-content/themes/generatepress/css/unsemantic-grid.min.css?ver=2.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='generate-style-css'  href='https://domoticproject.com/wp-content/themes/generatepress/style.min.css?ver=2.3.2' type='text/css' media='all' />
+<style id='generate-style-inline-css' type='text/css'>
+.generate-page-header, .page-header-image, .page-header-image-single {display:none}
+body{background-color:#efefef;color:#3a3a3a;}a, a:visited{color:#1e73be;}a:hover, a:focus, a:active{color:#000000;}body .grid-container{max-width:1100px;}body, button, input, select, textarea{font-family:"Roboto", sans-serif;}.entry-content > [class*="wp-block-"]:not(:last-child){margin-bottom:1.5em;}.main-navigation .main-nav ul ul li a{font-size:14px;}@media (max-width:768px){.main-title{font-size:30px;}h1{font-size:30px;}h2{font-size:25px;}}.top-bar{background-color:#636363;color:#ffffff;}.top-bar a,.top-bar a:visited{color:#ffffff;}.top-bar a:hover{color:#303030;}.site-header{background-color:#ffffff;color:#3a3a3a;}.site-header a,.site-header a:visited{color:#3a3a3a;}.main-title a,.main-title a:hover,.main-title a:visited{color:#222222;}.site-description{color:#757575;}.main-navigation,.main-navigation ul ul{background-color:#222222;}.main-navigation .main-nav ul li a,.menu-toggle{color:#ffffff;}.main-navigation .main-nav ul li:hover > a,.main-navigation .main-nav ul li:focus > a, .main-navigation .main-nav ul li.sfHover > a{color:#ffffff;background-color:#3f3f3f;}button.menu-toggle:hover,button.menu-toggle:focus,.main-navigation .mobile-bar-items a,.main-navigation .mobile-bar-items a:hover,.main-navigation .mobile-bar-items a:focus{color:#ffffff;}.main-navigation .main-nav ul li[class*="current-menu-"] > a{color:#ffffff;background-color:#3f3f3f;}.main-navigation .main-nav ul li[class*="current-menu-"] > a:hover,.main-navigation .main-nav ul li[class*="current-menu-"].sfHover > a{color:#ffffff;background-color:#3f3f3f;}.navigation-search input[type="search"],.navigation-search input[type="search"]:active{color:#3f3f3f;background-color:#3f3f3f;}.navigation-search input[type="search"]:focus{color:#ffffff;background-color:#3f3f3f;}.main-navigation ul ul{background-color:#3f3f3f;}.main-navigation .main-nav ul ul li a{color:#ffffff;}.main-navigation .main-nav ul ul li:hover > a,.main-navigation .main-nav ul ul li:focus > a,.main-navigation .main-nav ul ul li.sfHover > a{color:#ffffff;background-color:#4f4f4f;}.main-navigation .main-nav ul ul li[class*="current-menu-"] > a{color:#ffffff;background-color:#4f4f4f;}.main-navigation .main-nav ul ul li[class*="current-menu-"] > a:hover,.main-navigation .main-nav ul ul li[class*="current-menu-"].sfHover > a{color:#ffffff;background-color:#4f4f4f;}.separate-containers .inside-article, .separate-containers .comments-area, .separate-containers .page-header, .one-container .container, .separate-containers .paging-navigation, .inside-page-header{background-color:#ffffff;}.entry-meta{color:#595959;}.entry-meta a,.entry-meta a:visited{color:#595959;}.entry-meta a:hover{color:#1e73be;}.sidebar .widget{background-color:#ffffff;}.sidebar .widget .widget-title{color:#000000;}.footer-widgets{background-color:#ffffff;}.footer-widgets .widget-title{color:#000000;}.site-info{color:#ffffff;background-color:#222222;}.site-info a,.site-info a:visited{color:#ffffff;}.site-info a:hover{color:#606060;}.footer-bar .widget_nav_menu .current-menu-item a{color:#606060;}input[type="text"],input[type="email"],input[type="url"],input[type="password"],input[type="search"],input[type="tel"],input[type="number"],textarea,select{color:#666666;background-color:#fafafa;border-color:#cccccc;}input[type="text"]:focus,input[type="email"]:focus,input[type="url"]:focus,input[type="password"]:focus,input[type="search"]:focus,input[type="tel"]:focus,input[type="number"]:focus,textarea:focus,select:focus{color:#666666;background-color:#ffffff;border-color:#bfbfbf;}button,html input[type="button"],input[type="reset"],input[type="submit"],a.button,a.button:visited,a.wp-block-button__link:not(.has-background){color:#ffffff;background-color:#666666;}button:hover,html input[type="button"]:hover,input[type="reset"]:hover,input[type="submit"]:hover,a.button:hover,button:focus,html input[type="button"]:focus,input[type="reset"]:focus,input[type="submit"]:focus,a.button:focus,a.wp-block-button__link:not(.has-background):active,a.wp-block-button__link:not(.has-background):focus,a.wp-block-button__link:not(.has-background):hover{color:#ffffff;background-color:#3f3f3f;}.generate-back-to-top,.generate-back-to-top:visited{background-color:rgba( 0,0,0,0.4 );color:#ffffff;}.generate-back-to-top:hover,.generate-back-to-top:focus{background-color:rgba( 0,0,0,0.6 );color:#ffffff;}.inside-header{padding:20px 40px 20px 40px;}.entry-content .alignwide, body:not(.no-sidebar) .entry-content .alignfull{margin-left:-40px;width:calc(100% + 80px);max-width:calc(100% + 80px);}.rtl .menu-item-has-children .dropdown-menu-toggle{padding-left:20px;}.rtl .main-navigation .main-nav ul li.menu-item-has-children > a{padding-right:20px;}@media (max-width:768px){.separate-containers .inside-article, .separate-containers .comments-area, .separate-containers .page-header, .separate-containers .paging-navigation, .one-container .site-content, .inside-page-header{padding:30px;}.entry-content .alignwide, body:not(.no-sidebar) .entry-content .alignfull{margin-left:-30px;width:calc(100% + 60px);max-width:calc(100% + 60px);}}.one-container .sidebar .widget{padding:0px;}/* End cached CSS */@media (max-width: 768px){.main-navigation .menu-toggle,.main-navigation .mobile-bar-items,.sidebar-nav-mobile:not(#sticky-placeholder){display:block;}.main-navigation ul,.gen-sidebar-nav{display:none;}[class*="nav-float-"] .site-header .inside-header > *{float:none;clear:both;}}@font-face {font-family: "GeneratePress";src:  url("https://domoticproject.com/wp-content/themes/generatepress/fonts/generatepress.eot");src:  url("https://domoticproject.com/wp-content/themes/generatepress/fonts/generatepress.eot#iefix") format("embedded-opentype"),  url("https://domoticproject.com/wp-content/themes/generatepress/fonts/generatepress.woff2") format("woff2"),  url("https://domoticproject.com/wp-content/themes/generatepress/fonts/generatepress.woff") format("woff"),  url("https://domoticproject.com/wp-content/themes/generatepress/fonts/generatepress.ttf") format("truetype"),  url("https://domoticproject.com/wp-content/themes/generatepress/fonts/generatepress.svg#GeneratePress") format("svg");font-weight: normal;font-style: normal;}.main-navigation .slideout-toggle a:before,.slide-opened .slideout-overlay .slideout-exit:before {font-family: GeneratePress;}.slideout-navigation .dropdown-menu-toggle:before {content: "\f107" !important;}.slideout-navigation .sfHover > a .dropdown-menu-toggle:before {content: "\f106" !important;}
+.site-header {background-image: url(https://domoticproject.com/wp-content/uploads/2017/11/HeaderImage.jpg); background-repeat: no-repeat; background-size: 100% auto; background-attachment: fixed; }
+</style>
+<link rel='stylesheet' id='generate-mobile-style-css'  href='https://domoticproject.com/wp-content/themes/generatepress/css/mobile.min.css?ver=2.3.2' type='text/css' media='all' />
+<link rel='stylesheet' id='generate-child-css'  href='https://domoticproject.com/wp-content/themes/generatepress-child/style.css?ver=1525859496' type='text/css' media='all' />
+<link rel='stylesheet' id='slb_core-css'  href='https://domoticproject.com/wp-content/plugins/simple-lightbox/client/css/app.css?ver=2.9.3' type='text/css' media='all' />
+<link rel='stylesheet' id='blog-styles-css'  href='https://domoticproject.com/wp-content/plugins/gp-premium/blog/functions/css/style-min.css?ver=1.2.94' type='text/css' media='all' />
+<link rel='stylesheet' id='generate-secondary-nav-css'  href='https://domoticproject.com/wp-content/plugins/gp-premium/secondary-nav/functions/css/style.min.css?ver=1.2.94' type='text/css' media='all' />
+<style id='generate-secondary-nav-inline-css' type='text/css'>
+.secondary-navigation{background-color:#636363;}.secondary-navigation .main-nav ul li a,.secondary-navigation .menu-toggle{color:#ffffff;}button.secondary-menu-toggle:hover,button.secondary-menu-toggle:focus{color:#ffffff;}.widget-area .secondary-navigation{margin-bottom:20px;}.secondary-navigation ul ul{background-color:#303030;top:auto;}.secondary-navigation .main-nav ul ul li a{color:#ffffff;}.secondary-navigation .main-nav ul li > a:hover,.secondary-navigation .main-nav ul li > a:focus,.secondary-navigation .main-nav ul li.sfHover > a{color:#ffffff;background-color:#303030;}.secondary-navigation .main-nav ul ul li > a:hover,.secondary-navigation .main-nav ul ul li > a:focus,.secondary-navigation .main-nav ul ul li.sfHover > a{color:#ffffff;background-color:#474747;}.secondary-navigation .main-nav ul li[class*="current-menu-"] > a, .secondary-navigation .main-nav ul li[class*="current-menu-"] > a:hover,.secondary-navigation .main-nav ul li[class*="current-menu-"].sfHover > a{color:#222222;background-color:#ffffff;}.secondary-navigation .main-nav ul ul li[class*="current-menu-"] > a,.secondary-navigation .main-nav ul ul li[class*="current-menu-"] > a:hover,.secondary-navigation .main-nav ul ul li[class*="current-menu-"].sfHover > a{color:#222222;background-color:#ffffff;}
+</style>
+<link rel='stylesheet' id='generate-secondary-nav-mobile-css'  href='https://domoticproject.com/wp-content/plugins/gp-premium/secondary-nav/functions/css/mobile.min.css?ver=1.2.94' type='text/css' media='all' />
+<script type='text/javascript' src='https://domoticproject.com/wp-includes/js/jquery/jquery.min.js?ver=3.5.1' id='jquery-core-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=3.3.2' id='jquery-migrate-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/photo-gallery/booster/assets/js/circle-progress.js?ver=1.2.2' id='twbbwg-circle-js'></script>
+<script type='text/javascript' id='twbbwg-global-js-extra'>
+/* <![CDATA[ */
+var twb = {"nonce":"20f0bd226a","ajax_url":"https:\/\/domoticproject.com\/wp-admin\/admin-ajax.php","plugin_url":"https:\/\/domoticproject.com\/wp-content\/plugins\/photo-gallery\/booster","href":"https:\/\/domoticproject.com\/wp-admin\/admin.php?page=twbbwg_photo-gallery"};
+var twb = {"nonce":"20f0bd226a","ajax_url":"https:\/\/domoticproject.com\/wp-admin\/admin-ajax.php","plugin_url":"https:\/\/domoticproject.com\/wp-content\/plugins\/photo-gallery\/booster","href":"https:\/\/domoticproject.com\/wp-admin\/admin.php?page=twbbwg_photo-gallery"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/photo-gallery/booster/assets/js/global.js?ver=1.0.0' id='twbbwg-global-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/google-analytics-for-wordpress/assets/js/frontend-gtag.min.js?ver=8.14.1' id='monsterinsights-frontend-script-js'></script>
+<script data-cfasync="false" data-wpfc-render="false" type="text/javascript" id='monsterinsights-frontend-script-js-extra'>/* <![CDATA[ */
+var monsterinsights_frontend = {"js_events_tracking":"true","download_extensions":"doc,pdf,ppt,zip,xls,docx,pptx,xlsx","inbound_paths":"[]","home_url":"https:\/\/domoticproject.com","hash_tracking":"false","ua":"UA-109186450-1","v4_id":""};/* ]]> */
+</script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/photo-gallery/js/jquery.sumoselect.min.js?ver=3.4.6' id='sumoselect-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/photo-gallery/js/tocca.min.js?ver=2.0.9' id='bwg_mobile-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/photo-gallery/js/jquery.mCustomScrollbar.concat.min.js?ver=3.1.5' id='mCustomScrollbar-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/photo-gallery/js/jquery.fullscreen.min.js?ver=0.6.0' id='jquery-fullscreen-js'></script>
+<script type='text/javascript' id='bwg_frontend-js-extra'>
+/* <![CDATA[ */
+var bwg_objectsL10n = {"bwg_field_required":"field is required.","bwg_mail_validation":"This is not a valid email address.","bwg_search_result":"There are no images matching your search.","bwg_select_tag":"Select Tag","bwg_order_by":"Order By","bwg_search":"Search","bwg_show_ecommerce":"Show Ecommerce","bwg_hide_ecommerce":"Hide Ecommerce","bwg_show_comments":"Show Comments","bwg_hide_comments":"Hide Comments","bwg_restore":"Restore","bwg_maximize":"Maximize","bwg_fullscreen":"Fullscreen","bwg_exit_fullscreen":"Exit Fullscreen","bwg_search_tag":"SEARCH...","bwg_tag_no_match":"No tags found","bwg_all_tags_selected":"All tags selected","bwg_tags_selected":"tags selected","play":"Play","pause":"Pause","is_pro":"","bwg_play":"Play","bwg_pause":"Pause","bwg_hide_info":"Hide info","bwg_show_info":"Show info","bwg_hide_rating":"Hide rating","bwg_show_rating":"Show rating","ok":"Ok","cancel":"Cancel","select_all":"Select all","lazy_load":"0","lazy_loader":"https:\/\/domoticproject.com\/wp-content\/plugins\/photo-gallery\/images\/ajax_loader.png","front_ajax":"0","bwg_tag_see_all":"see all tags","bwg_tag_see_less":"see less tags"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/photo-gallery/js/scripts.min.js?ver=1.8.14' id='bwg_frontend-js'></script>
+<link rel="https://api.w.org/" href="https://domoticproject.com/wp-json/" /><link rel="alternate" type="application/json" href="https://domoticproject.com/wp-json/wp/v2/posts/909" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://domoticproject.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://domoticproject.com/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 5.6.10" />
+<link rel='shortlink' href='https://domoticproject.com/?p=909' />
+<link rel="alternate" type="application/json+oembed" href="https://domoticproject.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fdomoticproject.com%2Froomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://domoticproject.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fdomoticproject.com%2Froomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera%2F&#038;format=xml" />
+<link rel="pingback" href="https://domoticproject.com/xmlrpc.php">
+<meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="https://domoticproject.com/wp-content/uploads/2017/11/cropped-domoticProject-logo-32x32.png" sizes="32x32" />
+<link rel="icon" href="https://domoticproject.com/wp-content/uploads/2017/11/cropped-domoticProject-logo-192x192.png" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://domoticproject.com/wp-content/uploads/2017/11/cropped-domoticProject-logo-180x180.png" />
+<meta name="msapplication-TileImage" content="https://domoticproject.com/wp-content/uploads/2017/11/cropped-domoticProject-logo-270x270.png" />
+		<style type="text/css" id="wp-custom-css">
+			/*
+You can add your own CSS here.
+
+Click the help icon above to learn more.
+*/
+
+
+.main-title a, .main-title a:hover, .main-title a:visited {
+    color: #fafafa;
+    background-color: rgba(0, 0, 0, 0.3);
+	padding-left: 30px;
+	padding-right: 30px;
+
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 20px;
+    margin-top: 40px;
+
+
+}
+
+ h3, h4, h5, h6 {    
+	font-weight: bold;
+}
+
+
+p{
+	margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+li{
+	margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+img{
+	margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+code {
+	 background-color: rgba(187, 187, 187, 0.2);
+}
+.widget-title {
+	margin-bottom: 5px;
+	margin-top: 5px;
+}
+
+.textwidget.custom-html-widget p{
+	font-size: 15px;
+}
+
+.widget-area {
+	padding: 0px;
+}
+
+.widget.inner-padding {
+	padding: 10px;
+}
+
+
+
+
+.widget.inner-padding li {
+	margin: 0px;
+    font-size: 15px;
+}
+
+/*
+.widget.inner-padding.widget_search {
+	padding: 10px;
+}
+
+.widget.inner-padding.widget_recent_entries {
+	padding: 10px;
+}
+
+.widget.inner-padding.widget_archive {
+	padding: 10px;
+}
+
+.widget.inner-padding.widget_categories {
+	padding: 10px;
+}
+
+.widget.inner-padding.widget_tag_cloud {
+	padding: 10px;
+}*/
+
+/* Custom, iPhone Retina */ 
+    @media only screen and (min-width : 320px) {
+		.inside-header {
+    		padding-top: 50px;
+		}
+	   .main-navigation {
+			display: none;
+		}
+    }
+
+    /* Extra Small Devices, Phones */ 
+    @media only screen and (min-width : 480px) {
+		.inside-header {
+    		padding-top: 100px;
+		}
+	   .main-navigation {
+			display: none;
+		}
+    }
+
+    /* Small Devices, Tablets */
+    @media only screen and (min-width : 768px) {
+		.inside-header {
+    		padding-top: 150px;
+		}
+    }
+
+    /* Medium Devices, Desktops */
+    @media only screen and (min-width : 992px) {
+		.inside-header {
+    		padding-top: 200px;
+		}
+    }
+
+    /* Large Devices, Wide Screens */
+    @media only screen and (min-width : 1200px) {
+		.inside-header {
+    		padding-top: 300px;
+		}
+    }
+
+table {
+background: #fff;
+-moz-border-radius: 3px;
+-webkit-border-radius: 3px;
+border-radius: 3px;
+border: 1px solid #ddd;
+margin:auto;
+  }
+
+ table thead, table tfoot { background: #f5f5f5; }
+ table thead tr th,
+ table tfoot tr th,
+ table tbody tr td,
+ table tr td,
+ table tfoot tr td { font-size: 15px; line-height: 18px; text-align: left; }
+ table thead tr th,
+ table tfoot tr td { padding: 8px 10px 9px; font-size: 15px; font-weight: bold; color: #222; }
+ table thead tr th:first-child, table tfoot tr td:first-child { border-left: none; }
+ table thead tr th:last-child, table tfoot tr td:last-child { border-right: none; }
+
+	  table tbody tr.even,
+	  table tbody tr.alt { background: #f9f9f9; }
+	  table tbody tr:nth-child(even) { background: #f9f9f9; }
+	  table tbody tr td { color: #333; padding: 9px 10px; vertical-align: top; border: none; }
+
+body {counter-reset: h2}
+h2 {counter-reset: h3}
+h3 {counter-reset: h4}
+h4 {counter-reset: h5}
+h5 {counter-reset: h6}
+
+h2:before {counter-increment: h2; content: counter(h2) ". "}
+h3:before {counter-increment: h3; content: counter(h2) "." counter(h3) ". "}
+h4:before {counter-increment: h4; content: counter(h2) "." counter(h3) "." counter(h4) ". "}
+h5:before {counter-increment: h5; content: counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) ". "}
+h6:before {counter-increment: h6; content: counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) "." counter(h6) ". "}
+
+h2.widget-title:before, h2.entry-title:before, h3.comment-reply-title:before, h3.comments-title:before { content: ""; counter-increment: none }  		</style>
+		</head>
+
+<body class="post-template-default single single-post postid-909 single-format-standard wp-embed-responsive post-image-below-header post-image-aligned-center secondary-nav-above-header secondary-nav-aligned-right sections-no-sidebars sticky-menu-fade navigation-logo-sticky right-sidebar nav-below-header fluid-header separate-containers active-footer-widgets-0 nav-aligned-left header-aligned-left dropdown-hover featured-image-active" itemtype="https://schema.org/Blog" itemscope>
+	<a class="screen-reader-text skip-link" href="#content" title="Skip to content">Skip to content</a>		<header id="masthead" class="site-header" itemtype="https://schema.org/WPHeader" itemscope>
+			<div class="inside-header grid-container grid-parent">
+				<div class="site-branding">
+					<p class="main-title" itemprop="headline">
+				<a href="https://domoticproject.com/" rel="home">
+					Domotic Project
+				</a>
+			</p>
+					
+				</div>			</div><!-- .inside-header -->
+		</header><!-- #masthead -->
+				<nav id="site-navigation" class="main-navigation" itemtype="https://schema.org/SiteNavigationElement" itemscope>
+			<div class="inside-navigation grid-container grid-parent">
+								<button class="menu-toggle" aria-controls="primary-menu" aria-expanded="false">
+										<span class="mobile-menu">Menu</span>
+				</button>
+						<div id="primary-menu" class="main-nav">
+			<ul class="menu sf-menu">
+				<li class="page_item page-item-1027"><a href="https://domoticproject.com/fernando-and-daniel/">Fernando and Daniel</a></li>
+			</ul>
+		</div><!-- .main-nav -->
+					</div><!-- .inside-navigation -->
+		</nav><!-- #site-navigation -->
+		
+	<div id="page" class="hfeed site grid-container container grid-parent">
+		<div id="content" class="site-content">
+			
+	<div id="primary" class="content-area grid-parent mobile-grid-100 grid-75 tablet-grid-75">
+		<main id="main" class="site-main">
+			
+<article id="post-909" class="post-909 post type-post status-publish format-standard has-post-thumbnail hentry category-raspberry category-roomba category-web-server tag-irobot tag-picamera tag-raspberry-pi-zero-w tag-roomba" itemtype="https://schema.org/CreativeWork" itemscope>
+	<div class="inside-article">
+		<div class="page-header-image-single grid-container grid-parent generate-page-header">
+				
+					<img width="1198" height="898" src="https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View.jpg" class="attachment-full size-full" alt="" loading="lazy" itemprop="image" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View.jpg 1198w, https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View-300x225.jpg 300w, https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View-768x576.jpg 768w, https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View-1024x768.jpg 1024w" sizes="(max-width: 1198px) 100vw, 1198px" />
+				
+			</div>
+		<header class="entry-header">
+			<h1 class="entry-title" itemprop="headline">Roomberry Surveillance Robot: Roomba + Raspberry Pi Zero W + Camera</h1>			<div class="entry-meta">
+				<span class="posted-on"><a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/" title="21:19" rel="bookmark"><time class="updated" datetime="2019-03-20T12:27:53+01:00" itemprop="dateModified">20th March 2019</time><time class="entry-date published" datetime="2018-08-14T21:19:01+02:00" itemprop="datePublished">14th August 2018</time></a></span> <span class="byline"><span class="author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope>by <a class="url fn n" href="https://domoticproject.com/author/dani-macias-perea/" title="View all posts by dani" rel="author" itemprop="url"><span class="author-name" itemprop="name">dani</span></a></span></span> 			</div><!-- .entry-meta -->
+				</header><!-- .entry-header -->
+
+		
+		<div class="entry-content" itemprop="text">
+			<div id="toc_container" class="no_bullets"><p class="toc_title">Contents</p><ul class="toc_list"><li></li><li><ul><li></li><li></li><li><ul><li></li><li></li><li></li></ul></li><li><ul><li></li><li></li><li></li><li></li><li></li></ul></li></ul></li><li><ul><li></li><li></li><li></li><li></li></ul></li><li><ul><li></li><li><ul><li></li><li></li><li></li><li></li></ul></li></ul></li><li></li></ul></div>
+<h2><span id="Introduction">Introduction</span></h2>
+<p>Years ago I started doing some tests to <strong>control a Roomba</strong> <strong>remotely </strong>using an Arduino One with a RN-VX WiFly module. Last month I decided to revitalize the idea but with a new objective: to turn the Roomba into a <strong>surveillance robot</strong> with the ability to take photos and videos. The first idea was to keep using the Arduino as microcontroller employing an <a href="http://www.arducam.com/" target="_blank" rel="noopener">Arducam</a> module to capture pictures. However I quickly found that the image processing capacity of Arduino was too limited for my interests. The second option was to change the platform and use a <strong>Raspberry Pi Zero W</strong> with a camera module. This alternative meant some challenges, specially regarding powering but also offered more possibilities. In this post I will explain how to build <strong>Roomberry</strong>, a<strong> surveillance robot </strong>based on<strong> Roomba </strong>using a<strong> Raspberry Pi Zero W</strong> and a <strong>camera module</strong>.</p>
+<p>A demonstration of Roomberry&#8217;s capabilities and the <strong>web interface</strong> developed to interact with it can be seen in the following video.</p>
+<p style="text-align: center;"><iframe width="825" height="464" src="https://www.youtube.com/embed/kQcQSE5pvNA?feature=oembed" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></p>
+<h2><span id="iRobot_Roomba">iRobot Roomba</span></h2>
+<p>iRobot&#8217;s Roomba offers an <strong>Open Interface</strong> (OI) to interact with the robot though a mini DIN connector. The OI is a software interface designed for Roomba creator 2 (an adaptation of serie 600). However, it is fully compatible with series 500 and 700 too. There are nevertheless some bugs depending on the platform and the firmware version used. The software interface lets you manipulate Roomba’s behaviour and read its sensors. A full description of its capabilities can be found in this <a href="https://domoticproject.com/wp-content/uploads/2018/08/iRobot_Roomba_600_Open_Interface_Spec.pdf" target="_blank" rel="noopener">document</a>.</p>
+<h3><span id="Mini_DIN_connector">Mini DIN connector</span></h3>
+<p>The Roomba <strong>mini DIN connector</strong> is located in the front right side of Roomba serie 700 and has 7 pins. Its position varies slightly in the series 600, whose location is in the rear right side of Roomba, under a snap-away plastic guard. <strong>Mini DIN 7</strong> male connectors are complicated to buy, however the more common mini <strong>DIN 8 pin male connector </strong>is also compatible. <a href="https://domoticproject.com/wp-content/uploads/2018/08/RoombaMiniDINConnection.png" data-slb-active="1" data-slb-asset="1336671183" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-full wp-image-914 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/RoombaMiniDINConnection.png" alt="Roomba Mini DIN Connection" width="844" height="532" srcset="https://domoticproject.com/wp-content/uploads/2018/08/RoombaMiniDINConnection.png 844w, https://domoticproject.com/wp-content/uploads/2018/08/RoombaMiniDINConnection-300x189.png 300w, https://domoticproject.com/wp-content/uploads/2018/08/RoombaMiniDINConnection-768x484.png 768w" sizes="(max-width: 844px) 100vw, 844px" /></a></p>
+<p>To ensure a smooth and reliable connection/disconnection of the port, I soldered a <a href="https://www.amazon.de/Weiblich-LED-Lichtleiste-Steckverbinder-flexible-LED-Streifen-Packung/dp/B00W0YU4K0/ref=pd_sim_201_4?_encoding=UTF8&amp;pd_rd_i=B00W0YU4K0&amp;pd_rd_r=1V5ZB1PAX81C13MZPTZA&amp;pd_rd_w=Zn6bd&amp;pd_rd_wg=LNUrV&amp;psc=1&amp;refRID=1V5ZB1PAX81C13MZPTZA" target="_blank" rel="noopener">5 pin cable</a> (designed for LED strips) with a female connector to a mini DIN 8 pin male connector using pins 1-2 (power), 6-7 (ground), 3 (RxD), 4 (TxD) and 5 (BRC). However, as commented later on, the power/ground connection were finally not needed. The resulting cable can be seen in the following pictures.</p>
+<table style="width: 100%;">
+<tbody>
+<tr>
+<th><a href="https://domoticproject.com/wp-content/uploads/2018/08/5PinCable.jpg" data-slb-active="1" data-slb-asset="1809960448" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-full wp-image-917 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/5PinCable.jpg" alt="5 Pin Cable" width="679" height="679" srcset="https://domoticproject.com/wp-content/uploads/2018/08/5PinCable.jpg 679w, https://domoticproject.com/wp-content/uploads/2018/08/5PinCable-150x150.jpg 150w, https://domoticproject.com/wp-content/uploads/2018/08/5PinCable-300x300.jpg 300w" sizes="(max-width: 679px) 100vw, 679px" /></a></th>
+<th><a href="https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-5Pin-MiniDIN7-Cable.jpg" data-slb-active="1" data-slb-asset="2089430216" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-large wp-image-954 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-5Pin-MiniDIN7-Cable-1024x768.jpg" alt="" width="1024" height="768" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-5Pin-MiniDIN7-Cable-1024x768.jpg 1024w, https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-5Pin-MiniDIN7-Cable-300x225.jpg 300w, https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-5Pin-MiniDIN7-Cable-768x576.jpg 768w, https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-5Pin-MiniDIN7-Cable.jpg 1263w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></th>
+</tr>
+</tbody>
+</table>
+<h3><span id="Roomba_Serial_Port">Roomba Serial Port</span></h3>
+<p>To use the OI, the <strong>commands</strong> should be sent though a <strong>two-way serial communication</strong> created in mini DIN 7 pins 3 (RxD) and 4 (TxD). This UART port works at <strong>TTL levels</strong> (0 &#8211; 5 V). This voltage is perfectly fine for microcontrollers using 5V logic, like most Arduino boards. However it is not good for those with lower voltage logic levels (like the Raspberry Pi).</p>
+<p>In theory, pin 3 (RxD) will take 3.3 V as the high logic level. But the Roomba will output 5V on its pin 4 (TxD), which may damage the Raspberry Pi Zero. To keep the hardware safe a <strong>logic level shifter</strong> should be used.  The simplest way to do this is with a resistor divider, as already implemented in <a href="https://domoticproject.com/calduino-connecting-arduino-ems-bus/#Calduino_Puting_it_al_together" target="_blank" rel="noopener">Calduino</a>, but this may not work at high speeds (Roomba&#8217; serial port works at 115200 bauds).</p>
+<p>Instead of that, an active level shifter is preferable. If you want to build your own circuit, use the field effect transistor AN10441 as explained <a href="https://domoticproject.com/wp-content/uploads/2018/08/Create_2_Serial_to_33V_Logic.pdf" target="_blank" rel="noopener">here</a>. A much easier option is to use one of the existing bi-directional logic level converters such as this <a href="https://www.sparkfun.com/products/12009" target="_blank" rel="noopener">one</a> from <a href="https://www.adafruit.com/" target="_blank" rel="noopener">Adafruit</a>. This device can manage up to 4 signals and safely step them down from 5V to 3.3V. At the same time it steps signals up from 3.3V to 5V .</p>
+<h3><span id="Powering_Raspberry_Pi_from_Roomba">Powering Raspberry Pi from Roomba</span></h3>
+<p>There are a few alternatives to provide power supply through Roomba&#8217;s battery:</p>
+<h4><span id="Powering_from_the_mini_DIN_7">Powering from the mini DIN 7</span></h4>
+<p>The mini DIN 7 provides an <strong>unregulated direct connection</strong> in pins 1/2 (Vcc) &#8211; 6/7 (Gnd) to Roomba’s battery. The connection is limited to <strong>200 mA</strong> though a <strong>PTC resettable fuse</strong>. It offers a voltage between 20.5 and 10V, limited to 0.2A with a power of 2W. The continuous draw from these two pins together should not exceed 200 mA. Drawing a peak greater than 500 mA will reset the fuse.</p>
+<p>A Raspberry Pi Zero W should be able to work using this supply.  The <a href="https://www.raspberrypi.org/help/faqs/#topPower" target="_blank" rel="noopener">Raspberry Pi Foundation</a> rates the typical bare-board active current consumption in 150 mA. This <a href="https://raspi.tv/2017/how-much-power-does-pi-zero-w-use" target="_blank" rel="noopener">benchmark</a> places it between <strong>120 mA</strong> in <strong>idle</strong> status and <strong>180 mA</strong> <strong>under stress</strong> (playing FullHD video, for instance). However, here the extra consumption of the camera is not considered. According to my measurements, the camera (I use this <a href="https://shop.pimoroni.com/products/raspberry-pi-zero-camera-module" target="_blank" rel="noopener">one</a>, with the same sensor as <a href="https://www.raspberrypi.org/documentation/hardware/camera/">version 1 official Pi camera</a>) increases the power consumption to more than 300 mA, with peaks of 450 mA. During my test the fuse was tripped several times while recording videos.</p>
+<p>As a conclusion, the existing thermofuse dismisses the use of this connection to power the Raspberry Pi Zero W. I have not been able to find out if it is possible and safe to remove the fuse from the board without damaging other components.</p>
+<h4><span id="Powering_from_an_external_power_bank">Powering from an external power bank</span></h4>
+<p>There are a few alternatives to avoid this fuse limit. On the one hand, the easier solution would be to use a <strong><a href="https://commons.wikimedia.org/wiki/Category:Powerbanks?uselang=en" target="_blank" rel="noopener">power bank</a></strong> to provide external power to the Raspberry Pi Zero. However, it will require the user to charge it periodically. Another option would be to design a serial connection between the mini DIN 7 power supply and the power bank. With a couple of electronic components it should be possible to use the Roomba battery to charge the power bank. To simplify my design I decided to avoid the use of any additional sources of power.</p>
+<h4><span id="Powering_from_the_battery">Powering from the battery</span></h4>
+<p>I finally decided to <strong>bypass</strong> the <strong>fuse</strong> by building a <strong>direct connection </strong>to the<strong> battery pack</strong>. The counterpart of this option is that you will have to <strong>partially disassemble the robot</strong>. In Roomba series 600 there are two big pads directly connected to the battery pack below the dock button. In Roomba series 700/800 you will have to disassemble a couple of components more. Have a look at the following <a href="https://www.youtube.com/watch?v=lvdmghqrHok" target="_blank" rel="noopener">video</a> until minute 6 to see, step by step, how to access your <strong>robot&#8217;s motherboard</strong>. Once done, just solder a couple of cables to the battery pad as shown in next pictures.</p>
+<p><a href="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_700_BatteryPack.jpg" data-slb-active="1" data-slb-asset="220685790" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="aligncenter size-large wp-image-916" src="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_700_BatteryPack-1024x484.jpg" alt="Roomba 700 Battery Access" width="1024" height="484" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_700_BatteryPack-1024x484.jpg 1024w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_700_BatteryPack-300x142.jpg 300w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_700_BatteryPack-768x363.jpg 768w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_700_BatteryPack.jpg 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p><a href="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_700_BatteryAccess.jpg" data-slb-active="1" data-slb-asset="1833347520" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="aligncenter size-large wp-image-918" src="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_700_BatteryAccess-1024x484.jpg" alt="Roomba 700 Battery Access" width="1024" height="484" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_700_BatteryAccess-1024x484.jpg 1024w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_700_BatteryAccess-300x142.jpg 300w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_700_BatteryAccess-768x363.jpg 768w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_700_BatteryAccess.jpg 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p>These cables will provide a direct connection to the battery not limited by any fuse. They supply between 20.5 and 10V, depending on the battery charging level. However, the Raspberry Pi Zero W needs a <strong>regulated 5 V source of power. </strong>To reduce the voltage an <strong>step down</strong> is used. There are a lot of options to do this ranging from the use of a cheap <strong>linear regulator</strong> (such as the <a href="https://www.adafruit.com/product/2164" target="_blank" rel="noopener">7805 TO-220</a>) with a couple of capacitors to installing a <strong>switching regulator</strong>.</p>
+<p>Due to its <strong>higher efficiency</strong>, and considering that it will be always connected, I would advise to use/buy a <strong>good quality</strong> (avoid China imitations) <strong>step-down switching regulator</strong>. I have used <a href="https://www.pololu.com/product/2843" target="_blank" rel="noopener">Pololu D24V5F5</a> buck regulator which takes an input of up to 36 V and reduces it to 5V for a maximum output current of 500 mA. Its efficiency is rated between 85% and 90% and has a very low dropout. You can also use an UBEC (Universal Battery Elimination Circuit), such as the one commonly used in RC world. I placed my voltage regulator in a free space situated in the centre &#8211; right side of the robot.</p>
+<p><a href="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_StepDown_Converter.jpg" data-slb-active="1" data-slb-asset="274939663" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-large wp-image-919 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_StepDown_Converter-1024x484.jpg" alt="" width="1024" height="484" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_StepDown_Converter-1024x484.jpg 1024w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_StepDown_Converter-300x142.jpg 300w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_StepDown_Converter-768x363.jpg 768w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_StepDown_Converter.jpg 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p>The connections were properly protected with heatshrink and the D24V5F5 module was covered with isolating plastic (I did not take any photos of this). I soldered the module output to a micro-USB cable, which allows me to connect it directly to the Raspberry Pi Zero W power input.</p>
+<p><a href="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_USB5V_Cable-e1533569911328.jpg" data-slb-active="1" data-slb-asset="103144536" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-full wp-image-920 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_USB5V_Cable-e1533569911328.jpg" alt="" width="1014" height="479" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_USB5V_Cable-e1533569911328.jpg 1014w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_USB5V_Cable-e1533569911328-300x142.jpg 300w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_USB5V_Cable-e1533569911328-768x363.jpg 768w" sizes="(max-width: 1014px) 100vw, 1014px" /></a></p>
+<p>Using a rotating drilling tool and sandpaper I created a little notch in Roomba&#8217;s upper cover to allow a clean outlet of the micro USB cable as can be seen in the following picture.<a href="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_USB5V_Cable2.jpg" data-slb-active="1" data-slb-asset="99372065" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="aligncenter size-large wp-image-921" src="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_USB5V_Cable2-1024x484.jpg" alt="" width="1024" height="484" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_USB5V_Cable2-1024x484.jpg 1024w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_USB5V_Cable2-300x142.jpg 300w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_USB5V_Cable2-768x363.jpg 768w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_USB5V_Cable2.jpg 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<h3><span id="Roomba_OI_modes">Roomba OI modes</span></h3>
+<p>The Roomba OI has four operating modes: Off, Passive, Safe, and Full.</p>
+<p><a href="https://domoticproject.com/wp-content/uploads/2018/08/RoombaOIModes.png" data-slb-active="1" data-slb-asset="162184801" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="aligncenter wp-image-926 size-large" src="https://domoticproject.com/wp-content/uploads/2018/08/RoombaOIModes-1024x476.png" alt="" width="1024" height="476" /></a></p>
+<h4><span id="Off_Mode">Off Mode</span></h4>
+<p>After a battery change or when first powered, the OI is in <strong>off</strong> <strong>mode</strong>. In this status the Roomba listens to the port at the default baud rate (115200) waiting for an<br />
+<code>start</code> command. The commands <strong>reset </strong>and <strong>stop </strong>can be sent at any time and will turn OI also in <strong>off mode</strong>.</p>
+<h4><span id="Passive_Mode">Passive Mode</span></h4>
+<p>Once an <code>Start</code> command is sent, Roomba enters <strong>passive mode</strong>. In this status you can request and receive sensor data using any of the sensor commands. However you cannot change the current command parameters for the actuators (motors, speaker, lights, low side drivers, digital outputs). Roomba will enter <strong>passive mode</strong> too if one of the cleaning mode commands (Spot, Clean, Seek Dock, etc.) is sent.</p>
+<p>While in passive mode Roomba will go into <strong>off mode</strong> after five minutes of inactivity to save power and preserve battery. According to iRobot documentation, sleep can be disabled just pulsing the BRC pin low periodically before these five minutes expire. Each pulse should reset this five minutes counter. In the tests that I have performed (with a Roomba 780), pulling low the BRC will only wake up the robot, but it will not prevent it from going to power saving mode.  The robot will beep when it wakes up  (if it is not being charged in the dock station).</p>
+<h4><span id="Safe_Mode">Safe Mode</span></h4>
+<p>Roomba will enter in <strong>Safe mode</strong> if the <code>Safe</code> command is sent. Safe mode gives you full control of the robot and turns all motors and LEDs off. However, if a safety-related condition is not met, the robot will turn automatically into <strong>passive mode</strong>. Those safety conditions are: detection of a cliff while moving forward, wheel drop and charger connection. In this mode Roomba will not charge (although being at the dock) and will not save power by switching to off mode after 5 minutes of inactivity. This point is very important: you can end up draining the robot&#8217;s battery and damaging it if you don&#8217;t switch to passive or off mode.</p>
+<h4><span id="Full_Mode"><strong>Full Mode</strong></span></h4>
+<p>When you send a <code>Full</code> command to the OI, Roomba enters <strong>Full mode</strong>. The robot will behave exactly as in Safe mode, but it will not consider the safety-related conditions previously commented so be aware of the risks!</p>
+<h4><span id="Battery_precautions">Battery precautions</span></h4>
+<p>As commented, in <strong>Passive mode</strong>, Roomba will sleep after 5 minutes of inactivity to preserve battery power. In <strong>Safe</strong> and <strong>Full modes</strong>, Roomba will never sleep, and if it is left in this state for an extended period of time, it will <strong>deeply discharge its battery</strong>, even if plugged into the charger. The charger will power Roomba in all modes, but it will not charge the battery in Safe or Full mode. It is important to return Roomba to Passive or Off mode once a job is done and/or when battery level is low in order to protect it.</p>
+<h2><span id="Raspberry_Pi_Zero_W">Raspberry Pi Zero W</span></h2>
+<p>The <strong>Raspberry Pi Zero W</strong> is an updated version of the Raspberry Pi Zero with <b>wireless LAN </b>and<b> Bluetooth</b>. The model includes a 1 GHz single-core CPU, 512MB of RAM, mini-HDMI, a micro-USB OTG port, micro-USB for power, 40-pin header, composite video, reset headers, a camera connector, as well as the new wireless features. It uses wireless chip Cypress CYW43438 that supports 802.11b/g/n Wi-Fi (2.4GHz-only) and Bluetooth 4.0 (same chip as Raspberry Pi 3 Model B). I bought it in <a href="https://shop.pimoroni.de/products/raspberry-pi-zero-w" target="_blank" rel="noopener">Pimoroni</a> with headers (not soldered) and adapters for 16€.</p>
+<p><a href="https://domoticproject.com/wp-content/uploads/2018/08/RaspberryPiZeroW.png" rel="https://cdn.sparkfun.com/assets/learn_tutorials/6/7/6/PiZero_1.pdf" data-slb-active="1" data-slb-asset="863369815" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="aligncenter wp-image-928 size-full" src="https://domoticproject.com/wp-content/uploads/2018/08/RaspberryPiZeroW.png" alt="" width="632" height="324" srcset="https://domoticproject.com/wp-content/uploads/2018/08/RaspberryPiZeroW.png 632w, https://domoticproject.com/wp-content/uploads/2018/08/RaspberryPiZeroW-300x154.png 300w" sizes="(max-width: 632px) 100vw, 632px" /></a></p>
+<h3><span id="Camera">Camera</span></h3>
+<p>The Raspberry Pi Zero W CSI camera connector is smaller than the Pi 3 one. If you already have a camera, you will have to buy an adapter to use it. Otherwise, I would recommend to buy this <a href="https://shop.pimoroni.com/products/raspberry-pi-zero-camera-module?variant=37751082058" target="_blank" rel="noopener">camera module</a>, which incorporates a 5MP sensor (same as <a href="https://www.raspberrypi.org/documentation/hardware/camera/" target="_blank" rel="noopener">version 1 official Pi camera</a>) and can record video at 1080p. It costs 18€. I chose the wide angle camera with IR cut. I know that I will not be able to see anything at night but the use of IR LEDs will increase the energy consumption, which I wanted to keep low. You can always use <a href="https://www2.meethue.com/en-us" target="_blank" rel="noopener">Philips HUE lights</a> to remotely control your home lights.</p>
+<p><a href="https://domoticproject.com/wp-content/uploads/2018/08/Camera_Module_Raspberry_Pi_Zero_Wide_Angle.jpg" data-slb-active="1" data-slb-asset="779104291" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="wp-image-930 size-medium aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/Camera_Module_Raspberry_Pi_Zero_Wide_Angle-300x300.jpg" alt="" width="300" height="300" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Camera_Module_Raspberry_Pi_Zero_Wide_Angle-300x300.jpg 300w, https://domoticproject.com/wp-content/uploads/2018/08/Camera_Module_Raspberry_Pi_Zero_Wide_Angle-150x150.jpg 150w, https://domoticproject.com/wp-content/uploads/2018/08/Camera_Module_Raspberry_Pi_Zero_Wide_Angle-768x768.jpg 768w, https://domoticproject.com/wp-content/uploads/2018/08/Camera_Module_Raspberry_Pi_Zero_Wide_Angle.jpg 1024w" sizes="(max-width: 300px) 100vw, 300px" /></a></p>
+<h3><span id="Powering_Raspberry_Pi_Zero_W">Powering Raspberry Pi Zero W</span></h3>
+<p>There are a couple of considerations to be made regarding Pi Zero&#8217;s power supply. First of all, and unlike larger models, the Pi Zero<strong> does not have any regulation or fuse</strong> to protect it from over-voltage or current spikes. It means that you should supply a <strong>stable source of power</strong> with 5 V. The source of power can be connected to the right side micro USB (Pwr In) or to the 5V pin on the GPIO header. Both of them are the same line. Be sure that if an incorrect voltage is applied or a current spike occurs in the line, you will probably <strong>damage</strong> your Raspberry Pi <strong>permanently</strong>.</p>
+<p>As it has already been commented, consumption peaks of 400 mA with the camera connected have been measured while running stress tests. The Raspberry Pi Foundation recommends a power supply of at least 1.2 A. However, the 0.5 A provided by the buck regulator have been enough for me. Until now I did not found any problems related with the power supply.</p>
+<h3><span id="Reducing_power_consumption">Reducing power consumption</span></h3>
+<p>Considering that the Raspberry will run from Roomba&#8217;s battery, it will be interesting to <strong>reduce</strong> the <strong>power consumption </strong>as much as possible. For instance, knowing that the Pi Zero will run headless (without a monitor connected) and will only be accessed through SSH, there is no need to power the display circuitry. Disabling the HDMI port can save up to 25 mA. To do so, just run <code>/usr/bin/tvservice -o</code> (or with <code>-p</code> to re-enable). I have placed a short script in <code>/etc/rc.local</code> which checks if the HDMI cable is connected or not and disables the HDMI port accordingly.</p>
+<pre class="lang:sh decode:true"># Get the current video output type and strip away the unimportant bits
+video="$(tvservice -s | sed "s/^.*\[\([^ ]*\) .*$/\1/" )"
+
+if [ "$video" != "HDMI" ]; then
+        printf "HDMI not detected. Turning off.\n"
+        tvservice -off > /dev/null
+else
+        printf "HDMI detected.\n"
+fi
+</pre>
+<p>Another way to reduce the power consumption is disabling the LEDs of the Pi. The Raspberry Pi Zero has only one, the activity LED, that blinks every time the SD card is accessed. Its consumption is approximately 5 mA. To totally disable it add this lines in your <code>/etc/rc.local</code> file:</p>
+<pre class="lang:sh decode:true"># Set the Pi Zero ACT LED trigger to 'none'
+echo none | sudo tee /sys/class/leds/led0/trigger
+
+# Turn off the Pi Zero ACT LED
+echo 1 | sudo tee /sys/class/leds/led0/brightness</pre>
+<p>You can also do this by editing the <code>/etc/config.txt</code> file:</p>
+<pre class="lang:sh decode:true"># Disable the ACT LED on the Pi Zero
+
+dtparam=act_led_trigger=none
+dtparam=act_led_activelow=on</pre>
+<p>I am not sure if this will translate into a real consumption reduction, but as it will not be used, you can disable the bluetooth module of the Pi Zero by adding the following line to <code>/etc/config.txt</code>:</p>
+<pre class="lang:sh decode:true"># Disable bluetooth on the Pi Zero
+
+dtoverlay=pi3-disable-bt</pre>
+<p>Finally, try to reduce the software installed and running in the Pi Zero. For instance, use <strong>Raspbian lite</strong> instead of the desktop version and do not install extra software unless you really need it. The more processes running on your machine, the more consumption it will have.</p>
+<h3><span id="Other_considerations">Other considerations</span></h3>
+<ul>
+<li>It will be very useful to build a reset button in the Pi Zero. This way you will avoid having to disconnect and connect the power supply every time you want to restart the system. To do so, you only have to connect the Raspberry&#8217;s holes marked with <strong>run</strong> with a momentary switch. I have used one of <a href="https://www.sparkfun.com/products/10302" target="_blank" rel="noopener">this</a> from Sparkfun.</li>
+<li>You will require a new and fresh MicroSD card with Raspbian Stretch lite or newer. As explained in this <a href="https://domoticproject.com/extending-life-raspberry-pi-sd-card/" target="_blank" rel="noopener">post</a>, I would recommend using a card as large as possible. Although the configuration applied here tries to reduce the disk writes, leaving plenty of free space ensures a longer life to the SD cards.</li>
+<li>This tutorial considers that the Raspberry Pi Zero used is running <strong>Raspbian Stretch headless</strong>. You can read in previous posts how to <a href="https://domoticproject.com/installing-raspbian-raspberry/" target="_blank" rel="noopener">install Rasbian</a>, <a href="https://domoticproject.com/creating-new-user-in-raspberry-pi/" target="_blank" rel="noopener">create new users</a> and <a href="https://domoticproject.com/connecting-raspberry-pi-via-ssh/" target="_blank" rel="noopener">connect using SSH</a>.</li>
+</ul>
+<h2><span id="Building_Roomberry">Building Roomberry</span></h2>
+<p>Once all the pieces have been described, let&#8217;s see how to build and run Roomberry, your Raspberry interface with Roomba.</p>
+<h3><span id="Hardware">Hardware</span></h3>
+<p>My objective was to encapsulate the components (Raspberry Pi Zero, camera module, logic level converter and switch button) in an stable <strong>case</strong> with easy access to all ports and SD card. The only option that I found, excluding printing my own 3D design, was <a href="https://www.amazon.de/gp/product/B01FHDXNNU/" target="_blank" rel="noopener">this</a> one. This case satisfies all the requirements and allows me to attach a <a href="https://www.raspberrypi.org/blog/introducing-raspberry-pi-hats/" target="_blank" rel="noopener">HAT</a> (Hardware Attached on Top), an add-on board with the couple of electronic components needed. The following image shows the PCB schema. Note that the <code>Run</code> pins are located in the Pi Zero and not in the HAT. To build it, a piece of a <a href="https://www.amazon.de/gp/product/B075ZN455T/ref=oh_aui_detailpage_o01_s01?ie=UTF8&amp;psc=1" target="_blank" rel="noopener">PCB Board</a> of 12 x 10 pins will be enough. To cut the PCB I have used a rotary tool.</p>
+<p><a href="https://domoticproject.com/wp-content/uploads/2018/08/PCB_Roomberry.png" data-slb-active="1" data-slb-asset="1569295088" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-large wp-image-938 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/PCB_Roomberry-1024x616.png" alt="" width="1024" height="616" srcset="https://domoticproject.com/wp-content/uploads/2018/08/PCB_Roomberry-1024x616.png 1024w, https://domoticproject.com/wp-content/uploads/2018/08/PCB_Roomberry-300x180.png 300w, https://domoticproject.com/wp-content/uploads/2018/08/PCB_Roomberry-768x462.png 768w, https://domoticproject.com/wp-content/uploads/2018/08/PCB_Roomberry.png 1241w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p>The <strong>logic level converter</strong> will need both high and low voltage, which can be obtained from GPIO (the Pi Zero includes a step down converter from 5 to 3.3 V named  PAM2306AYPKE). I have placed the <strong>switching button</strong> in the middle of the Pi Zero, as it was an extension of the HAT. By doing so the button&#8217;s stem stands out the case so it can be pressed externally. You will have to drill a couple of holes in the case: one for the button steam and another (and bigger) hole for the camera. Moreover, I had to sand carefully the case&#8217; space designed for the CSI connector to make room for a 180-degree turn of the cable. The following pictures show the results:</p>
+<p><a href="https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera.jpg" data-slb-active="1" data-slb-asset="416096649" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-large wp-image-931 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera-1024x484.jpg" alt="" width="1024" height="484" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera-1024x484.jpg 1024w, https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera-300x142.jpg 300w, https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera-768x363.jpg 768w, https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera.jpg 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p><a href="https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera2.jpg" data-slb-active="1" data-slb-asset="366689528" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-large wp-image-932 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera2-1024x484.jpg" alt="" width="1024" height="484" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera2-1024x484.jpg 1024w, https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera2-300x142.jpg 300w, https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera2-768x363.jpg 768w, https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera2.jpg 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p><a href="https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View.jpg" data-slb-active="1" data-slb-asset="1992241462" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-large wp-image-956 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View-1024x768.jpg" alt="" width="1024" height="768" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View-1024x768.jpg 1024w, https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View-300x225.jpg 300w, https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View-768x576.jpg 768w, https://domoticproject.com/wp-content/uploads/2018/08/Roomberry-Front-View.jpg 1198w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p><a href="https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera3.jpg" data-slb-active="1" data-slb-asset="1141673509" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="aligncenter wp-image-933 size-large" src="https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera3-1024x484.jpg" alt="" width="1024" height="484" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera3-1024x484.jpg 1024w, https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera3-300x142.jpg 300w, https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera3-768x363.jpg 768w, https://domoticproject.com/wp-content/uploads/2018/08/Roofino_Roomba_RaspberryPiZeroW_Camera3.jpg 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<h3><span id="Software">Software</span></h3>
+<h4><span id="Configuring_Raspbian_Stretch">Configuring Raspbian Stretch</span></h4>
+<p>Before connecting Roomberry to the mini DIN 7 connector of the Roomba, a few configuration steps should be performed. Assuming that the Raspberry Pi Zero W is running the last version of Raspbian and is already set up headless:</p>
+<ol>
+<li>Connect the<strong> micro USB power supply</strong> built in <a href="#Powering_from_the_battery" target="_blank" rel="noopener">section 2.3.2</a> to the Pi Zero. After a few seconds the system should be up and running. Open an SSH connection to your pi Zero.</li>
+<li>By default the Pi’s serial port is configured to be used for <strong>console input/output</strong>. To communicate with Roomba though this port, the serial console login needs to be disabled. You can do it with <code>raspi-config</code> choosing menu 5 &#8211; Interfacing options and P6 &#8211; Serial. Answer <strong>No</strong> to the question &#8220;Would you like to login shell to be accesible over serial?&#8221; and <strong>Yes</strong> to &#8220;Would you like the serial port hardware to be enabled?&#8221;.  Do not restart the system yet. Alternatively you can also comment the console definition and add to the end of file  <code>/boot/config</code> the following line:
+<pre class="lang:sh decode:true">#Find and comment console definition
+#console=serial0,115200
+...
+enable_uart=1</pre>
+</li>
+<li>If you have not done it yet, enable the <strong>camera module</strong>. Again, you can do it though <code>raspi-config</code> choosing menu 5 and P1 option. On the other hand, you can also edit file <code>/boot/config</code> and include these changes (disabling camera led is not required but recommended to save power):
+<pre class="lang:default decode:true">start_x=1
+gpu_mem=128
+disable_camera_led=1</pre>
+<p>I am not sure which is the optimum quantity of RAM to assign as <code>gpu_memory</code> when the camera module is being used. Until now I have not found any “Out of resource” errors while operating with the camera, so I assume 128 Mb is a good choice.</li>
+<li>Disable all <strong>swap</strong> and mount <code>/tmp</code> directory in RAM Disk with 50 megabytes of space. This location will be used to store ephemeral files, such as camera snaps and Roomba status files. Increase the commit time in<code>/etc/fstab</code> to 30 minutes and include the <span style="color: #222222; font-family: monospace;"><span style="background-color: #e9ebec;">noatime</span></span> option in the SD partition. Find the commands in this <a href="https://domoticproject.com/extending-life-raspberry-pi-sd-card/" target="_blank" rel="noopener">post</a>.</li>
+<li>Now it is time to test if everything is working correctly. Turn down your Pi and connect the serial port to Roomba. Place the Roomba at the <strong>charging dock</strong>. Boot the system and check that everything is working as expected (and that the robot is not doing anything strange).</li>
+<li><strong>Test reading from serial port</strong>: I have used<code>minicom</code> to read the data sent by Roomba. To install it just type:
+<pre class="lang:default decode:true">sudo apt-get install minicom
+</pre>
+<p>Connect with the serial port of Roomba by doing:</p>
+<pre class="lang:default decode:true">minicom -b 115200 -o -D /dev/serial0</pre>
+<p>If your Roomba is charging you should see a text similar to following image reporting the charging state of the Roomba every second. Press CTRL + A and X to exit <code>minicom</code>.<br />
+<a href="https://domoticproject.com/wp-content/uploads/2018/08/Minicom_Roomba_output.png" data-slb-active="1" data-slb-asset="998053205" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-full wp-image-944 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/Minicom_Roomba_output.png" alt="" width="660" height="356" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Minicom_Roomba_output.png 660w, https://domoticproject.com/wp-content/uploads/2018/08/Minicom_Roomba_output-300x162.png 300w" sizes="(max-width: 660px) 100vw, 660px" /></a></li>
+<li><strong>Test writing to serial port</strong>: you can run a short Python script that will write to serial port. First of all, you will need to install <code>pyserial</code> library (to access serial port):
+<pre class="lang:default decode:true">sudo apt-get install python-serial python3-serial</pre>
+<p>Now open an interactive python2 shell (just type python2, will not work with python3) and run this code (line by line):</p>
+<pre class="lang:default decode:true">import serial
+import time
+
+# Open a serial connection to Roomba
+ser = serial.Serial(port='/dev/serial0', baudrate=115200)
+
+# Assuming the robot is awake, start safe mode. Note that 0x83 in hexadecimal corresponds to 131.
+ser.write('\x83')
+
+time.sleep(.1)
+
+# Start cleaning - 135
+ser.write('\x87')
+
+# Stop (back to off mode) - 173
+ser.write('\xAD')
+
+# Close the serial port; we're done for now.
+ser.close()
+
+</pre>
+<p>If the robot started a clean cycle after the 4th instruction and stopped after the 5th, congratulations! If one of these last two steps did not work, something may be wrong with your<br />
+hardware (probably on the prototyping board). Have a look at the connections and retry.</li>
+</ol>
+<h4><span id="Dependant_Libraries">Dependant Libraries</span></h4>
+<p>First of all, to interact with the robot and the camera attached to Roomberry I have used a couple of third party libraries. You will need to install them before proceeding:</p>
+<ul>
+<li>To operate the <strong>camera</strong> use <code>picamera</code>. This <a href="https://picamera.readthedocs.io/en/release-1.13/index.html" target="_blank" rel="noopener">package</a> provides a pure Python interface to the Raspberry Pi camera module (both V1 and V2) for Python 2.7 (or superior) or Python 3.2 (or superior). It is usually installed by default in Raspbian distributions. Try it by typing:
+<pre class="">python -c import picamera</pre>
+<p>If you get no error, you got <code>picamera</code> installed. If you receive an import error, install the module first by running:</p>
+<pre class="">sudo apt-get install python-picamera python3-picamera</pre>
+</li>
+<li>There are a few implementations of <strong>iRobot Open Interface</strong> for different programming languages. I wanted to learn Python more deeply so I decided to use <a href="http://blog.lemoneerlabs.com/page/About" rel="nofollow">Matthew Witherwax</a>&#8216; irobot <a href="https://github.com/julianpistorius/irobot" target="_blank" rel="noopener">library</a>. All the functions documented in the OI Specification are implemented. I have corrected a few bugs in the code and created a new repository, available in my <a href="https://github.com/danimaciasperea/irobot" target="_blank" rel="noopener">Github</a>. A couple of improvements / adaptations have already been done:
+<ul>
+<li>Allow the use of an alternative <strong>wake up</strong> function using the Raspberry&#8217;s GPIO Pin connected to the Baud Rate Change Pin of Roomba (default wake up function uses serial&#8217;s RTS pin).</li>
+<li>Enable <strong>history</strong> in the <a href="https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop" target="_blank" rel="noopener">REPL</a> <strong>python console</strong>.</li>
+<li>The Roomba prints after waking up or while charging some information regarding its status. A <strong>flush of the serial port</strong> before every read operation is done now to avoid issues with this unexpected messages.</li>
+<li>To avoid trying to waking up the robot before entering in power safe mode, I have removed the 15 seconds margin included in the <code>handle_auto_wakeup</code> function.</li>
+<li>Connected with previous point, in case a command does not receive an answer, a wake up pulse is immediately sent (just in case the robot is sleep). If the command is repeated, it will be correctly replied.</li>
+<li>There was a bug in the distance and angle measurement in old versions of Roomba. The issue was solved in release 3.4.1.  Distance and angle can also be approximated from wheel&#8217;s quirks. The creator method of this library tries to obtain firmware version by rebooting Roomba and parsing the welcome message. By this way it can decide to use the distance reported by the robot or the alternative based on quirks. Unfortunately, new versions of the robot (series 700 and 800) does not print <strong>firmware version</strong> in the welcome message at startup. I have removed the reboot operation and added the option to use quircks approximation as a parameter in the creator method.If you want to know your Roomba&#8217;s 700/800 firmware version, open a minicom console and wait until the robot enters sleep mode (5 minutes without interaction). Press then any button (or send a wake up through the GPIO). The robot will report, among other information, the firmware&#8217;s release as can be seen in this figure.<a href="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_Firmware.png" data-slb-active="1" data-slb-asset="435914628" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-full wp-image-952 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_Firmware.png" alt="" width="663" height="662" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_Firmware.png 663w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_Firmware-150x150.png 150w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_Firmware-300x300.png 300w" sizes="(max-width: 663px) 100vw, 663px" /></a></li>
+</ul>
+</li>
+<li>To use irobot library download the last release and install it using <code>pip</code> (I used <code>pip3</code>):
+<pre class="">mkdir /tmp/irobot
+wget https://github.com/danimaciasperea/irobot/archive/1.0.0.tar.gz -P /tmp/irobot/
+pip install /tmp/irobot/1.0.0.tar.gz</pre>
+<p>Depending on the version of pip used (<code>pip -version</code>) the library will be installed in a different folder <code>/usr/local/lib/pythonX.Y/</code>.</br><br />
+Let&#8217;s do now a short test. Run the following instructions (I am using Python3 but the library is fully compatible with Python 2.7 too). Remember to update the library path depending on the <code>pip</code> version used:</p>
+<pre class="">python3 /usr/local/lib/pythonX.Y/dist-packages/irobot/console_interfaces/create2.py
+Launching REPL
+Serial Port> /dev/serial0
+BRC Pin> 27
+Enable quirks> No
+
+Create2 attached as robot on /dev/serial0
+May it serve you well
+
+robot.clean()
+
+robot.stop()</pre>
+<p>If everything works fine you will be able to control interactively your Roomba though this console.</li>
+</ul>
+<h4><span id="Installing_Roomberry_daemon">Installing Roomberry daemon</span></h4>
+<p>To interact with Roomberry I have developed a <strong>Python 3</strong> program that creates a <strong>multithreading web server</strong>. This code is intended to run as a daemon and handles the <strong>HTTP GET Requests</strong> performed against Roomberry. The commands sent to the robot are encoded in the request&#8217;s <strong>URL query string</strong>. The URL path should start with <code>cam</code> or <code>roomba</code> depending on the device that will execute the operation. If the command needs one or more parameters, they should be just passed as a field-value pair in the query string. For instance:</p>
+<pre class="lang:default decode:true">#Send a clean command to Roomba
+curl 'roomberry/roomba/?op=clean'
+
+#Drive Roomba straight at 20 mm/s
+curl 'roomberry/roomba/?op=drive&amp;velocity=11&amp;radius=32768'
+
+#Set camera saturation to 65
+curl 'roomberry/cam/?op=cam&amp;saturation=65'
+
+#Download picture taken 20180810 at 102849
+wget roomberry/cam/20180810/20180810-102849.jpg</pre>
+<p>Download the code from my <a href="https://github.com/danimaciasperea/Roomberry">Github</a> repository. Install the required libraries and configure your IFTTT key, as well as the log path, before launching it. Wrap it with a service to start it automatically every time the Pi Zero boots up. In this <a href="https://domoticproject.com/creating-raspberry-pi-service/" target="_blank" rel="noopener">entry</a> you can find more information on how to do it.</p>
+<pre class="">wget https://github.com/danimaciasperea/Roomberry/archive/1.0.0.tar.gz -P /tmp/
+tar -xvf /tmp/1.0.0.tar.gz -C /tmp/ 
+
+
+#Before doing next step, adapt the code to your environment (serial port used, IFTTT Key, etc.)
+sudo cp /tmp/Roomberry-1.0.0/roomberry/roomberry.py /usr/local/bin/
+sudo cp /tmp/Roomberry-1.0.0/roomberry/roomberry.service /lib/systemd/system/
+
+sudo systemctl enable roomberry.service
+service roomberry start</pre>
+<p>Some considerations regarding the code:</p>
+<ul>
+<li>Each request starts a <strong>handler thread</strong> so, to avoid concurrent access to the robot or the camera, <strong>Lock objects</strong> are used.</li>
+<li>A <strong>log file</strong> is created reporting each request received (IP, datetime and url), as well as errors handled. Edit the daemon configuration to change the location/name of the log file. Change the log level from DEBUG to ERROR or CRITICAL to reduce its verbosity.</li>
+<li>An additional thread is created to evaluate periodically <strong>Roomba&#8217;s battery level</strong>. It will also close the camera after a certain number of seconds of inactivity to reduce battery consumption and memory usage. If the battery level is too low, Roomba will be sent home (<code>seek_dock()</code> operation). If the battery reaches a critical level, Roomba will be stopped and the Pi Zero will be immediately turned off to avoid battery damage. IFTTT notifications are sent in both cases. Update your IFTTT key to use this functionality or comment lines 135 and 143 to skip it. Find a guide on creating IFTTT events in this <a href="https://domoticproject.com/raspberry-pi-security/#Creating_an_Applet_in_IFTTT" target="_blank" rel="noopener">post</a>.</li>
+<li>The <strong>pictures</strong> and <strong>recordings</strong> taken are saved in Raspberry&#8217;s SD Card. Upon request, the web server will serve them.</li>
+<li>The server will create and send XML files to report the <strong>status</strong> of the <strong>robot</strong>, the <strong>camera</strong> and the <strong>multimedia</strong> files generated. This files, as they will be frequently updated, will be placed on <code>/tmp</code> directory (recommended to be mounted in RAM memory).</li>
+<li>As a design decision and with the aim of reducing resource consumption in the Pi Zero, it has been decided to perform all the <strong>communications in plain text</strong> without encryption or authorisation. For this reason it is strongly advised not to allow direct communication with the Pi Zero trough the internet. In my case, the Raspberry Pi that I use as the &#8220;brain&#8221; of my domotic system is the only device authorised to talk with the Zero. You can easily achieve this by adding rules in <code>iptables</code> as explained <a href="https://domoticproject.com/raspberry-pi-security/#Creating_firewall_rules" target="_blank" rel="noopener">here</a>.</li>
+</ul>
+<h4><span id="Web_interface">Web interface</span></h4>
+<p><a href="https://domoticproject.com/wp-content/uploads/2018/08/Screen-capture-WebInterface-Roomberry.png" data-slb-active="1" data-slb-asset="1947529289" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="wp-image-959 size-large aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/Screen-capture-WebInterface-Roomberry-1024x963.png" alt="" width="1024" height="963" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Screen-capture-WebInterface-Roomberry-1024x963.png 1024w, https://domoticproject.com/wp-content/uploads/2018/08/Screen-capture-WebInterface-Roomberry-300x282.png 300w, https://domoticproject.com/wp-content/uploads/2018/08/Screen-capture-WebInterface-Roomberry-768x722.png 768w, https://domoticproject.com/wp-content/uploads/2018/08/Screen-capture-WebInterface-Roomberry.png 1920w" sizes="(max-width: 1024px) 100vw, 1024px" /></a></p>
+<p>In order to control Roomberry in an easy way I have developed a simple web interface. You can see a demonstration of how it works in the video at the beginning of this post. To use it you will have to include your Roomberry&#8217;s IP in the <code>/etc/hosts</code> file of your Raspberry to point the right address. Without being exhaustive, those are the main characteristics of the web application:</p>
+<ul>
+<li>I have followed <strong>Bootstrap framework </strong>(<strong>HTML5 </strong>and <strong>Javascript</strong> with <strong>AJAX</strong> requests) and <strong>PHP</strong>  in the server side. This web interface is served by my main Raspberry Pi (not in the Pi Zero!) running <span style="color: #222222; font-family: monospace;"><span style="background-color: #e9ebec;">apache2</span></span> with <span style="color: #222222; font-family: monospace;"><span style="background-color: #e9ebec;">PHP</span></span> enabled.</li>
+<li>This web requires <strong>password authentication</strong> and all the<strong> communications</strong> performed are <strong>encrypted</strong>. As previously commented, only the information exchanged locally (in my local network) between the main Raspberry Pi and Roomberry travels in plain text. The requests are done in the server by PHP using <code>libcurl</code> library. This way, if a video is required, the main Pi will forward the request to Roomberry, who will sent it first to the main Pi and who latter will serve it. I know that this is not the most efficient approach but in this project <strong>security</strong> was my <strong>first</strong> <strong>priority</strong>, considering that somebody could eventually gain access to a robot with a camera placed at my home.</li>
+<li>To control the movements of the Robot I have used <a href="https://yoannmoinet.github.io/nipplejs/" target="_blank" rel="noopener">nippleJS</a> to draw a <strong>virtual joystick</strong> that sends commands to the Roomba. Alternatively, the four main directions (forward, backward, left and right) and speed can also be manually set. In the advanced section of this panel the speed, radius as well as the PWM (Pulse-Width Modulation) of all the motors (brushes and wheels) can be controlled.<a href="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_Web_Interface_Directions_Control.png" data-slb-active="1" data-slb-asset="910084609" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-full wp-image-965 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_Web_Interface_Directions_Control.png" alt="" width="391" height="740" srcset="https://domoticproject.com/wp-content/uploads/2018/08/Roomba_Web_Interface_Directions_Control.png 391w, https://domoticproject.com/wp-content/uploads/2018/08/Roomba_Web_Interface_Directions_Control-159x300.png 159w" sizes="(max-width: 391px) 100vw, 391px" /></a></li>
+<li>Roomba can be configured to <strong>play songs</strong> as explained in the <a href="https://domoticproject.com/wp-content/uploads/2018/08/iRobot_Roomba_600_Open_Interface_Spec.pdf" target="_blank" rel="noopener">documentation</a>. <a href="https://tonejs.github.io/" target="_blank" rel="noopener">ToneJS</a> is used to produce notes and test songs before sending them to Roomba. The songs can be saved in disk and recovered later.<a href="https://domoticproject.com/wp-content/uploads/2018/08/RoombaSongEditorModal.png" data-slb-active="1" data-slb-asset="637159946" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-full wp-image-966 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/RoombaSongEditorModal.png" alt="" width="600" height="652" srcset="https://domoticproject.com/wp-content/uploads/2018/08/RoombaSongEditorModal.png 600w, https://domoticproject.com/wp-content/uploads/2018/08/RoombaSongEditorModal-276x300.png 276w" sizes="(max-width: 600px) 100vw, 600px" /></a></li>
+<li>To show Roomba&#8217; status I have used several solutions. For instance, <strong>Roomba&#8217;s battery level </strong>is depicted in a circular gauge with <a href="http://justgage.com/" target="_blank" rel="noopener">Justgage</a> plugin. Other information is showed in standard HTML labels while a graphic with Roomba&#8217;s sensors is depicted using <strong>HTML5&#8217;s canvas</strong>. The drawing, as well as the rest of elements, are refreshed periodically depending on the <code>telemetry_refresh</code> value.<a href="https://domoticproject.com/wp-content/uploads/2018/08/RoombaStatus.png" data-slb-active="1" data-slb-asset="641648491" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-full wp-image-967 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/RoombaStatus.png" alt="" width="371" height="567" srcset="https://domoticproject.com/wp-content/uploads/2018/08/RoombaStatus.png 371w, https://domoticproject.com/wp-content/uploads/2018/08/RoombaStatus-196x300.png 196w" sizes="(max-width: 371px) 100vw, 371px" /></a></li>
+<li><strong>Camera controls</strong> are standard HTML buttons, selectors, spinners and inputs. The refresh of snap buttons can also be adjusted.<a href="https://domoticproject.com/wp-content/uploads/2018/08/PiCameraWebControl.png" data-slb-active="1" data-slb-asset="61389817" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-full wp-image-968 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/PiCameraWebControl.png" alt="" width="382" height="974" srcset="https://domoticproject.com/wp-content/uploads/2018/08/PiCameraWebControl.png 382w, https://domoticproject.com/wp-content/uploads/2018/08/PiCameraWebControl-118x300.png 118w" sizes="(max-width: 382px) 100vw, 382px" /></a></li>
+<li>Finally the <strong>pictures</strong> and <strong>videos</strong> taken are shown in a tree. Clicking in one of this elements will open a new modal containing the photo or video requested.<a href="https://domoticproject.com/wp-content/uploads/2018/08/PiCameraRecordCaptureControl.png" data-slb-active="1" data-slb-asset="768866136" data-slb-internal="0" data-slb-group="909"><img loading="lazy" class="size-full wp-image-969 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/08/PiCameraRecordCaptureControl.png" alt="" width="379" height="710" srcset="https://domoticproject.com/wp-content/uploads/2018/08/PiCameraRecordCaptureControl.png 379w, https://domoticproject.com/wp-content/uploads/2018/08/PiCameraRecordCaptureControl-160x300.png 160w" sizes="(max-width: 379px) 100vw, 379px" /></a></li>
+</ul>
+<p>To make everything work you should install in the Raspberry Pi where the Apache server runs the following libraries:</p>
+<pre class="lang:sh decode:true " >Curl Library: sudo apt-get install php5-curl
+
+XML parser Library: sudo apt-get install php5.6-xml
+
+MP4Box: sudo apt-get install -y gpac
+
+</pre>
+<p>And be sure that the folders/files served by apache belongs to user <code>www-data</code>:</p>
+<pre class="lang:sh decode:true " >sudo chmod -R www-data:www-data /var/www</pre>
+<h2><span id="Next_Steps">Next Steps</span></h2>
+<ul>
+<li>Roomba&#8217;s model 700 enters into<strong> sleep mode</strong> although the BRC pin is pulled down periodically. This is not a big problem because, when a command does not receive an answer, a wake up pulse is immediately sent. If a new command is sent, it will be correctly replied. However the first one will not be received by the robot, causing the throwing of an exception in the Roomberry log. Maybe doing some more research I can find a way to avoid this error.</li>
+<li>Although there are methods to<strong> stream real time video</strong> with a camera module and Raspberry, I have not found a way to integrate it in a third web without big delays and quality problems when using a Pi Zero. For this reason, I use in the web app snaps (pictures) refreshed frequently instead of videos.</li>
+<li>I have postponed for a second version of Roomberry the functionality of <strong>detecting movement</strong> and <strong>recognising objects</strong> through the camera. The Pi’s camera is capable of outputting the motion vector estimates that the camera’s H.264 encoder calculates while generating compressed video as explained <a href="http://picamera.readthedocs.io/en/release-1.12/recipes2.html#recording-motion-vector-data" target="_blank" rel="noopener">here</a>. It should not be very difficult to create a new thread that, in case of motion detection, saves the last seconds of the video in disk automatically. However I would like to explore also the possibility of using <a href="https://opencv.org/" target="_blank" rel="noopener">OpenCV</a> to search something in the house like, for instance, my dog. I will have a look on this in the future.</li>
+<li>An interesting function to control the robot would be to order a movement or turn for a certain number of millimetres or degrees.</li>
+<li>As this is my first project coded in Python, there is still a lot of room for improvement and optimisation. I will try to keep an eye on this in next iterations.</li>
+</ul>
+		</div><!-- .entry-content -->
+
+					<footer class="entry-meta">
+				<span class="cat-links"><span class="screen-reader-text">Categories </span><a href="https://domoticproject.com/category/raspberry/" rel="category tag">Raspberry</a>, <a href="https://domoticproject.com/category/roomba/" rel="category tag">Roomba</a>, <a href="https://domoticproject.com/category/raspberry/web-server/" rel="category tag">Web Server</a></span> <span class="tags-links"><span class="screen-reader-text">Tags </span><a href="https://domoticproject.com/tag/irobot/" rel="tag">iRobot</a>, <a href="https://domoticproject.com/tag/picamera/" rel="tag">picamera</a>, <a href="https://domoticproject.com/tag/raspberry-pi-zero-w/" rel="tag">Raspberry PI Zero W</a>, <a href="https://domoticproject.com/tag/roomba/" rel="tag">Roomba</a></span> 		<nav id="nav-below" class="post-navigation">
+			<span class="screen-reader-text">Post navigation</span>
+
+			<div class="nav-previous"><span class="prev" title="Previous"><a href="https://domoticproject.com/controlling-433-mhz-remote-raspberry-pi/" rel="prev">Controlling 433 MHz Remote Switches with Raspberry Pi</a></span></div><div class="nav-next"><span class="next" title="Next"><a href="https://domoticproject.com/controlling-philips-hue-lights-with-raspberry-pi/" rel="next">Controlling Philips HUE Lights with Raspberry PI</a></span></div>		</nav><!-- #nav-below -->
+					</footer><!-- .entry-meta -->
+			</div><!-- .inside-article -->
+</article><!-- #post-## -->
+
+					<div class="comments-area">
+						<div id="comments">
+
+			<h3 class="comments-title">
+			13 thoughts on &ldquo;Roomberry Surveillance Robot: Roomba + Raspberry Pi Zero W + Camera&rdquo;		</h3>
+
+		
+		<ol class="comment-list">
+			
+		<li id="comment-142" class="comment even thread-even depth-1 parent">
+			<article id="div-comment-142" class="comment-body" itemtype="https://schema.org/Comment" itemscope>
+				<footer class="comment-meta">
+					<img alt='' src='https://secure.gravatar.com/avatar/5ae7ca0fee06f3fb24a78939747245f1?s=50&#038;r=g' srcset='https://secure.gravatar.com/avatar/5ae7ca0fee06f3fb24a78939747245f1?s=100&#038;r=g 2x' class='avatar avatar-50 photo' height='50' width='50' loading='lazy'/>					<div class="comment-author-info">
+						<div class="comment-author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+							<cite itemprop="name" class="fn">Tony</cite>						</div><!-- .comment-author -->
+
+						<div class="entry-meta comment-metadata">
+							<a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#comment-142">
+								<time datetime="2018-08-29T14:22:16+02:00" itemprop="datePublished">
+									29th August 2018 at 14:22								</time>
+							</a>
+														<span class="reply">| <a rel='nofollow' class='comment-reply-link' href='#comment-142' data-commentid="142" data-postid="909" data-belowelement="div-comment-142" data-respondelement="respond" data-replyto="Reply to Tony" aria-label='Reply to Tony'>Reply</a></span>						</div><!-- .comment-metadata -->
+					</div><!-- .comment-author-info -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content" itemprop="text">
+					<p>Hello, thanks for sharing this great project with us. I run into some installation issues though.</p>
+<p>pi@raspberrypi:~ $ wget <a href="https://github.com/danimaciasperea/irobot/archive/irobot-1.0.0.tar.gz" rel="nofollow ugc">https://github.com/danimaciasperea/irobot/archive/irobot-1.0.0.tar.gz</a> -O /tmp/irobot/</p>
+<p>gives the following error message :</p>
+<p>/tmp/irobot/: Is a directory</p>
+<p>Any clue what&#8217;s wrong ? Thanks !! Kind Regards, Tony</p>
+				</div><!-- .comment-content -->
+			</article><!-- .comment-body -->
+		<ul class="children">
+
+		<li id="comment-144" class="comment byuser comment-author-dani-macias-perea bypostauthor odd alt depth-2">
+			<article id="div-comment-144" class="comment-body" itemtype="https://schema.org/Comment" itemscope>
+				<footer class="comment-meta">
+					<img alt='' src='https://secure.gravatar.com/avatar/204a85ec17c6bd1d6313c5878495ef07?s=50&#038;r=g' srcset='https://secure.gravatar.com/avatar/204a85ec17c6bd1d6313c5878495ef07?s=100&#038;r=g 2x' class='avatar avatar-50 photo' height='50' width='50' loading='lazy'/>					<div class="comment-author-info">
+						<div class="comment-author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+							<cite itemprop="name" class="fn">dani</cite>						</div><!-- .comment-author -->
+
+						<div class="entry-meta comment-metadata">
+							<a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#comment-144">
+								<time datetime="2018-08-29T15:42:42+02:00" itemprop="datePublished">
+									29th August 2018 at 15:42								</time>
+							</a>
+														<span class="reply">| <a rel='nofollow' class='comment-reply-link' href='#comment-144' data-commentid="144" data-postid="909" data-belowelement="div-comment-144" data-respondelement="respond" data-replyto="Reply to dani" aria-label='Reply to dani'>Reply</a></span>						</div><!-- .comment-metadata -->
+					</div><!-- .comment-author-info -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content" itemprop="text">
+					<p>Sorry Tony, it was a typo mistake.<br />
+It should say -P and not -O.<br />
+I have corrected the guide.<br />
+Thanks!<br />
+Dani</p>
+				</div><!-- .comment-content -->
+			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+
+		<li id="comment-181" class="comment even thread-odd thread-alt depth-1 parent">
+			<article id="div-comment-181" class="comment-body" itemtype="https://schema.org/Comment" itemscope>
+				<footer class="comment-meta">
+					<img alt='' src='https://secure.gravatar.com/avatar/3f792c9428da24080f06f6484cced97d?s=50&#038;r=g' srcset='https://secure.gravatar.com/avatar/3f792c9428da24080f06f6484cced97d?s=100&#038;r=g 2x' class='avatar avatar-50 photo' height='50' width='50' loading='lazy'/>					<div class="comment-author-info">
+						<div class="comment-author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+							<cite itemprop="name" class="fn">Abraham</cite>						</div><!-- .comment-author -->
+
+						<div class="entry-meta comment-metadata">
+							<a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#comment-181">
+								<time datetime="2018-10-11T13:54:52+02:00" itemprop="datePublished">
+									11th October 2018 at 13:54								</time>
+							</a>
+														<span class="reply">| <a rel='nofollow' class='comment-reply-link' href='#comment-181' data-commentid="181" data-postid="909" data-belowelement="div-comment-181" data-respondelement="respond" data-replyto="Reply to Abraham" aria-label='Reply to Abraham'>Reply</a></span>						</div><!-- .comment-metadata -->
+					</div><!-- .comment-author-info -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content" itemprop="text">
+					<p>Hi Dani,</p>
+<p>Such a nice and well explained tutorial. I just have a problem with the Roomba. Most of the instructions are working unless stop() and power_down().<br />
+I&#8217;m using an iRobot create2, connecting the USB cable to the RPi. Runing /console_interfaces/create2.py. The input and output is the following:<br />
+Launching REPL<br />
+Serial Port&gt; /dev/ttyUSB0<br />
+BRC Pin&gt; 5</p>
+<p>Checking firmware for quirks<br />
+Restarting Robot&#8230;<br />
+Could not determine firmware<br />
+Enabling quirks for safety<br />
+Create2 attached as robot on /dev/ttyUSB0<br />
+May it serve you well</p>
+<p>When I type clean and I want to stop; sometimes the Roomba produces a beep but it doesn&#8217;t stop and trying with power_down simply doesn&#8217;t respond. Is there something related to the firmware or hardware perhaps?</p>
+<p>Thanks in advance, Abraham</p>
+				</div><!-- .comment-content -->
+			</article><!-- .comment-body -->
+		<ul class="children">
+
+		<li id="comment-182" class="comment byuser comment-author-dani-macias-perea bypostauthor odd alt depth-2">
+			<article id="div-comment-182" class="comment-body" itemtype="https://schema.org/Comment" itemscope>
+				<footer class="comment-meta">
+					<img alt='' src='https://secure.gravatar.com/avatar/204a85ec17c6bd1d6313c5878495ef07?s=50&#038;r=g' srcset='https://secure.gravatar.com/avatar/204a85ec17c6bd1d6313c5878495ef07?s=100&#038;r=g 2x' class='avatar avatar-50 photo' height='50' width='50' loading='lazy'/>					<div class="comment-author-info">
+						<div class="comment-author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+							<cite itemprop="name" class="fn">dani</cite>						</div><!-- .comment-author -->
+
+						<div class="entry-meta comment-metadata">
+							<a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#comment-182">
+								<time datetime="2018-10-11T14:51:31+02:00" itemprop="datePublished">
+									11th October 2018 at 14:51								</time>
+							</a>
+														<span class="reply">| <a rel='nofollow' class='comment-reply-link' href='#comment-182' data-commentid="182" data-postid="909" data-belowelement="div-comment-182" data-respondelement="respond" data-replyto="Reply to dani" aria-label='Reply to dani'>Reply</a></span>						</div><!-- .comment-metadata -->
+					</div><!-- .comment-author-info -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content" itemprop="text">
+					<p>Hi Abraham,</p>
+<p>I am not sure where the problem can be. If all the commands works fine except this two, my guess is that, as you pointed out, the problem is related with the firmware version of the Roomba.</p>
+<p>What Roomba model do you have and what version of the firmware is installed?</p>
+<p>Do you have the same problem when launching the stop / power down command directly from an interactive python shell?</p>
+				</div><!-- .comment-content -->
+			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+
+		<li id="comment-183" class="comment even thread-even depth-1 parent">
+			<article id="div-comment-183" class="comment-body" itemtype="https://schema.org/Comment" itemscope>
+				<footer class="comment-meta">
+					<img alt='' src='https://secure.gravatar.com/avatar/3f792c9428da24080f06f6484cced97d?s=50&#038;r=g' srcset='https://secure.gravatar.com/avatar/3f792c9428da24080f06f6484cced97d?s=100&#038;r=g 2x' class='avatar avatar-50 photo' height='50' width='50' loading='lazy'/>					<div class="comment-author-info">
+						<div class="comment-author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+							<cite itemprop="name" class="fn">Abraham</cite>						</div><!-- .comment-author -->
+
+						<div class="entry-meta comment-metadata">
+							<a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#comment-183">
+								<time datetime="2018-10-11T19:25:15+02:00" itemprop="datePublished">
+									11th October 2018 at 19:25								</time>
+							</a>
+														<span class="reply">| <a rel='nofollow' class='comment-reply-link' href='#comment-183' data-commentid="183" data-postid="909" data-belowelement="div-comment-183" data-respondelement="respond" data-replyto="Reply to Abraham" aria-label='Reply to Abraham'>Reply</a></span>						</div><!-- .comment-metadata -->
+					</div><!-- .comment-author-info -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content" itemprop="text">
+					<p>Hi Dani,</p>
+<p>I really appreciate your help. I&#8217;m not sure which is the firmware, is it 3.5? Anyways, I copy-paste the commands from the minicom below:</p>
+<p>2016-02-08-1606-L<br />
+r3-robot/tags/release-3.8.1:6188 CLEAN  </p>
+<p>bootloader id: 4719 5964 7AC4 BFFF<br />
+assembly: 3.5-lite-batt<br />
+revision: 2<br />
+flash version: 10<br />
+flash info crc passed: 1                </p>
+<p>battery-current-zero 255<br />
+bl-start<br />
+STR730<br />
+bootloader id: #x47195964 7AC4BFFF<br />
+bootloader info rev: #xF000<br />
+bootloader rev: #x0001<br />
+2007-05-14-1715-L<br />
+Roomba by iRobot!<br />
+str730<br />
+2016-02-08-1606-L<br />
+battery-current-zero 256</p>
+<p>2016-02-08-1606-L<br />
+r3-robot/tags/release-3.8.1:6188 CLEAN</p>
+<p>bootloader id: 4719 5964 7AC4 BFFF<br />
+assembly: 3.5-lite-batt<br />
+revision: 2<br />
+flash version: 10<br />
+flash info crc passed: 1</p>
+<p>estimate-battery-level-from-voltage 2521 mAH 16226 mV<br />
+battery-current-zero 256<br />
+bbox vars restored!<br />
+languages: english (0)</p>
+<p>Also, I&#8217;m using the python shell to test the commands. To be honest, I haven&#8217;t tested all of the &#8220;method&#8221; commands; however, I have tried some that put the Roomba into motion, and I would say I wanted to differentiate into two categories:<br />
+1.-(drive, drive_straight, spin_left, spin_right)<br />
+2.-(clean, clean_stop, seek_dock)<br />
+When I&#8217;m using the commands of the &#8220;1st&#8221; category, they work well, I can stop the Roomba by: drive_straight(0), and I can introduce the &#8220;2nd&#8221; category commands; unfortunately, once using the &#8220;2nd&#8221; category, the Roomba doesn&#8217;t respond any more to any commands, typing stop() I can listen to the bleep but it keeps going.</p>
+<p>Thanks for your time to answer my question, greetings!</p>
+<p>Abraham.</p>
+				</div><!-- .comment-content -->
+			</article><!-- .comment-body -->
+		<ul class="children">
+
+		<li id="comment-185" class="comment byuser comment-author-dani-macias-perea bypostauthor odd alt depth-2 parent">
+			<article id="div-comment-185" class="comment-body" itemtype="https://schema.org/Comment" itemscope>
+				<footer class="comment-meta">
+					<img alt='' src='https://secure.gravatar.com/avatar/204a85ec17c6bd1d6313c5878495ef07?s=50&#038;r=g' srcset='https://secure.gravatar.com/avatar/204a85ec17c6bd1d6313c5878495ef07?s=100&#038;r=g 2x' class='avatar avatar-50 photo' height='50' width='50' loading='lazy'/>					<div class="comment-author-info">
+						<div class="comment-author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+							<cite itemprop="name" class="fn">dani</cite>						</div><!-- .comment-author -->
+
+						<div class="entry-meta comment-metadata">
+							<a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#comment-185">
+								<time datetime="2018-10-12T09:03:21+02:00" itemprop="datePublished">
+									12th October 2018 at 09:03								</time>
+							</a>
+														<span class="reply">| <a rel='nofollow' class='comment-reply-link' href='#comment-185' data-commentid="185" data-postid="909" data-belowelement="div-comment-185" data-respondelement="respond" data-replyto="Reply to dani" aria-label='Reply to dani'>Reply</a></span>						</div><!-- .comment-metadata -->
+					</div><!-- .comment-author-info -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content" itemprop="text">
+					<p>Hi Abraham,</p>
+<p>I think I can guess what is going on.</p>
+<p>Roomba has 4 operating modes. There is a short summary here: <a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#Roomba_OI_modes" rel="nofollow ugc">https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#Roomba_OI_modes</a>.</p>
+<p>While Roomba is in Full or Safe mode you can use any of category 1 and 2 commands. However, when you send a category 2 command (Roomba’s documentation name them Cleaning Command), Roomba’s OI mode is changed to Passive mode and will no longer respond to category 1 commands (Actuator Commands).</p>
+<p>On the other hand, the Stop command will not stop the Roomba, but will stop the OI, changing the OI mode to Off. While your Roomba is in Off mode, you cannot interact with it at all (for this reason it stopped to react to your commands).</p>
+<p>If you send a Clean Command and want to stop it, just send a Clean Command again and the cleaning cycle will be paused. You can use too command Power to power down the robot.</p>
+<p>A full description of available commands, required OI modes and changes of mode can be found in Roomba’s OI specification (<a href="https://domoticproject.com/wp-content/uploads/2018/08/iRobot_Roomba_600_Open_Interface_Spec.pdf" rel="nofollow ugc">https://domoticproject.com/wp-content/uploads/2018/08/iRobot_Roomba_600_Open_Interface_Spec.pdf</a>).</p>
+<p>I hope it helps. Have fun with your Roomba!</p>
+<p>Dani</p>
+				</div><!-- .comment-content -->
+			</article><!-- .comment-body -->
+		<ul class="children">
+
+		<li id="comment-186" class="comment even depth-3">
+			<article id="div-comment-186" class="comment-body" itemtype="https://schema.org/Comment" itemscope>
+				<footer class="comment-meta">
+					<img alt='' src='https://secure.gravatar.com/avatar/3f792c9428da24080f06f6484cced97d?s=50&#038;r=g' srcset='https://secure.gravatar.com/avatar/3f792c9428da24080f06f6484cced97d?s=100&#038;r=g 2x' class='avatar avatar-50 photo' height='50' width='50' loading='lazy'/>					<div class="comment-author-info">
+						<div class="comment-author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+							<cite itemprop="name" class="fn">Abraham</cite>						</div><!-- .comment-author -->
+
+						<div class="entry-meta comment-metadata">
+							<a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#comment-186">
+								<time datetime="2018-10-12T11:03:40+02:00" itemprop="datePublished">
+									12th October 2018 at 11:03								</time>
+							</a>
+														<span class="reply">| <a rel='nofollow' class='comment-reply-link' href='#comment-186' data-commentid="186" data-postid="909" data-belowelement="div-comment-186" data-respondelement="respond" data-replyto="Reply to Abraham" aria-label='Reply to Abraham'>Reply</a></span>						</div><!-- .comment-metadata -->
+					</div><!-- .comment-author-info -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content" itemprop="text">
+					<p>Hi Dani,</p>
+<p>Thank you so much it works fine! It was a big whoa, now I can understand more about the modes, thanks for the tutorial and the information. </p>
+<p>Good luck with everything!</p>
+<p>Abraham</p>
+				</div><!-- .comment-content -->
+			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+
+		<li id="comment-548" class="comment odd alt thread-odd thread-alt depth-1 parent">
+			<article id="div-comment-548" class="comment-body" itemtype="https://schema.org/Comment" itemscope>
+				<footer class="comment-meta">
+					<img alt='' src='https://secure.gravatar.com/avatar/4cf4e52c1f55ee5856b1b5fbea4f082d?s=50&#038;r=g' srcset='https://secure.gravatar.com/avatar/4cf4e52c1f55ee5856b1b5fbea4f082d?s=100&#038;r=g 2x' class='avatar avatar-50 photo' height='50' width='50' loading='lazy'/>					<div class="comment-author-info">
+						<div class="comment-author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+							<cite itemprop="name" class="fn">Byron</cite>						</div><!-- .comment-author -->
+
+						<div class="entry-meta comment-metadata">
+							<a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#comment-548">
+								<time datetime="2019-05-28T01:12:09+02:00" itemprop="datePublished">
+									28th May 2019 at 01:12								</time>
+							</a>
+														<span class="reply">| <a rel='nofollow' class='comment-reply-link' href='#comment-548' data-commentid="548" data-postid="909" data-belowelement="div-comment-548" data-respondelement="respond" data-replyto="Reply to Byron" aria-label='Reply to Byron'>Reply</a></span>						</div><!-- .comment-metadata -->
+					</div><!-- .comment-author-info -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content" itemprop="text">
+					<p>Hello Dani: First I wish to congratulate you on a great robotics project and a wonderful tutorial. I have found an original iRobot iCreate. I would love to program this (Roomba 400 series) with python. I was wondering if you had any thoughts about using your  API with the original Create. I am under the impression that the original Create&#8217;s OI is now a subset of the Create2 OI. With that in mind, I hope that the basic control functions in your Create2 API will work. Your UI is amazing. Maybe That will work with the Original Create. Thanks again</p>
+				</div><!-- .comment-content -->
+			</article><!-- .comment-body -->
+		<ul class="children">
+
+		<li id="comment-551" class="comment byuser comment-author-dani-macias-perea bypostauthor even depth-2">
+			<article id="div-comment-551" class="comment-body" itemtype="https://schema.org/Comment" itemscope>
+				<footer class="comment-meta">
+					<img alt='' src='https://secure.gravatar.com/avatar/204a85ec17c6bd1d6313c5878495ef07?s=50&#038;r=g' srcset='https://secure.gravatar.com/avatar/204a85ec17c6bd1d6313c5878495ef07?s=100&#038;r=g 2x' class='avatar avatar-50 photo' height='50' width='50' loading='lazy'/>					<div class="comment-author-info">
+						<div class="comment-author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+							<cite itemprop="name" class="fn">dani</cite>						</div><!-- .comment-author -->
+
+						<div class="entry-meta comment-metadata">
+							<a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#comment-551">
+								<time datetime="2019-05-28T12:40:17+02:00" itemprop="datePublished">
+									28th May 2019 at 12:40								</time>
+							</a>
+														<span class="reply">| <a rel='nofollow' class='comment-reply-link' href='#comment-551' data-commentid="551" data-postid="909" data-belowelement="div-comment-551" data-respondelement="respond" data-replyto="Reply to dani" aria-label='Reply to dani'>Reply</a></span>						</div><!-- .comment-metadata -->
+					</div><!-- .comment-author-info -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content" itemprop="text">
+					<p>Hello Byron,<br />
+Thanks for your input. I think it should be relatively easy to adapt the Create2 API to the original Create. You can fork the irobot library (<a href="https://github.com/danimaciasperea/irobot" target="_blank" rel="noopener nofollow">https://github.com/danimaciasperea/irobot</a>) and include there the differences  between both specifications (if any) as well as include the functions that only create can (I think it can send IR commands to other Roombas).</p>
+<p>I found the specification of Create here: <a href="http://hackerspace.cs.rutgers.edu/library/iRobot/Documentation/OpenInterface_v2.pdf" target="_blank" rel="noopener nofollow">http://hackerspace.cs.rutgers.edu/library/iRobot/Documentation/OpenInterface_v2.pdf</a></p>
+<p>Have fun!</p>
+<p>Daniel</p>
+				</div><!-- .comment-content -->
+			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+
+		<li id="comment-552" class="comment odd alt thread-even depth-1">
+			<article id="div-comment-552" class="comment-body" itemtype="https://schema.org/Comment" itemscope>
+				<footer class="comment-meta">
+					<img alt='' src='https://secure.gravatar.com/avatar/4cf4e52c1f55ee5856b1b5fbea4f082d?s=50&#038;r=g' srcset='https://secure.gravatar.com/avatar/4cf4e52c1f55ee5856b1b5fbea4f082d?s=100&#038;r=g 2x' class='avatar avatar-50 photo' height='50' width='50' loading='lazy'/>					<div class="comment-author-info">
+						<div class="comment-author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+							<cite itemprop="name" class="fn">Byron</cite>						</div><!-- .comment-author -->
+
+						<div class="entry-meta comment-metadata">
+							<a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#comment-552">
+								<time datetime="2019-05-28T19:31:12+02:00" itemprop="datePublished">
+									28th May 2019 at 19:31								</time>
+							</a>
+														<span class="reply">| <a rel='nofollow' class='comment-reply-link' href='#comment-552' data-commentid="552" data-postid="909" data-belowelement="div-comment-552" data-respondelement="respond" data-replyto="Reply to Byron" aria-label='Reply to Byron'>Reply</a></span>						</div><!-- .comment-metadata -->
+					</div><!-- .comment-author-info -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content" itemprop="text">
+					<p>Thank You for the information Daniel:  I am off to play with my old Create and your new code. I look forward to reading about your future experiments with buttons and electricity.<br />
+Thanks<br />
+Byron</p>
+				</div><!-- .comment-content -->
+			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+
+		<li id="comment-2537" class="comment even thread-odd thread-alt depth-1 parent">
+			<article id="div-comment-2537" class="comment-body" itemtype="https://schema.org/Comment" itemscope>
+				<footer class="comment-meta">
+					<img alt='' src='https://secure.gravatar.com/avatar/0e02635c3d74ec10ae35b00f5a079132?s=50&#038;r=g' srcset='https://secure.gravatar.com/avatar/0e02635c3d74ec10ae35b00f5a079132?s=100&#038;r=g 2x' class='avatar avatar-50 photo' height='50' width='50' loading='lazy'/>					<div class="comment-author-info">
+						<div class="comment-author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+							<cite itemprop="name" class="fn">gian</cite>						</div><!-- .comment-author -->
+
+						<div class="entry-meta comment-metadata">
+							<a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#comment-2537">
+								<time datetime="2020-10-11T18:37:20+02:00" itemprop="datePublished">
+									11th October 2020 at 18:37								</time>
+							</a>
+														<span class="reply">| <a rel='nofollow' class='comment-reply-link' href='#comment-2537' data-commentid="2537" data-postid="909" data-belowelement="div-comment-2537" data-respondelement="respond" data-replyto="Reply to gian" aria-label='Reply to gian'>Reply</a></span>						</div><!-- .comment-metadata -->
+					</div><!-- .comment-author-info -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content" itemprop="text">
+					<p>Hello Dani</p>
+<p>This is a really inspiring project ! Do you think would be possible automatically stop  the robot when  raspberry (for any reason )poweroff  ?<br />
+cheers<br />
+gian</p>
+				</div><!-- .comment-content -->
+			</article><!-- .comment-body -->
+		<ul class="children">
+
+		<li id="comment-2538" class="comment byuser comment-author-dani-macias-perea bypostauthor odd alt depth-2">
+			<article id="div-comment-2538" class="comment-body" itemtype="https://schema.org/Comment" itemscope>
+				<footer class="comment-meta">
+					<img alt='' src='https://secure.gravatar.com/avatar/204a85ec17c6bd1d6313c5878495ef07?s=50&#038;r=g' srcset='https://secure.gravatar.com/avatar/204a85ec17c6bd1d6313c5878495ef07?s=100&#038;r=g 2x' class='avatar avatar-50 photo' height='50' width='50' loading='lazy'/>					<div class="comment-author-info">
+						<div class="comment-author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+							<cite itemprop="name" class="fn">dani</cite>						</div><!-- .comment-author -->
+
+						<div class="entry-meta comment-metadata">
+							<a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#comment-2538">
+								<time datetime="2020-10-11T21:48:21+02:00" itemprop="datePublished">
+									11th October 2020 at 21:48								</time>
+							</a>
+														<span class="reply">| <a rel='nofollow' class='comment-reply-link' href='#comment-2538' data-commentid="2538" data-postid="909" data-belowelement="div-comment-2538" data-respondelement="respond" data-replyto="Reply to dani" aria-label='Reply to dani'>Reply</a></span>						</div><!-- .comment-metadata -->
+					</div><!-- .comment-author-info -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content" itemprop="text">
+					<p>Hi Gian,</p>
+<p>If the Raspberry&#8217;s power is suddenly cut off, I don&#8217;t think there is a way to stop automatically the robot.<br />
+Otherwise, if the Raspberry turns down because it detects that the battery is too low or something like this, you can always send an stop command once the shut down is detected. Other option would be to create an script that runs automatically when the system enters in run level 0.</p>
+<p>Regards,</p>
+<p>Daniel</p>
+				</div><!-- .comment-content -->
+			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+</ul><!-- .children -->
+</li><!-- #comment-## -->
+
+		<li id="comment-2540" class="comment even thread-even depth-1">
+			<article id="div-comment-2540" class="comment-body" itemtype="https://schema.org/Comment" itemscope>
+				<footer class="comment-meta">
+					<img alt='' src='https://secure.gravatar.com/avatar/0e02635c3d74ec10ae35b00f5a079132?s=50&#038;r=g' srcset='https://secure.gravatar.com/avatar/0e02635c3d74ec10ae35b00f5a079132?s=100&#038;r=g 2x' class='avatar avatar-50 photo' height='50' width='50' loading='lazy'/>					<div class="comment-author-info">
+						<div class="comment-author vcard" itemprop="author" itemtype="https://schema.org/Person" itemscope>
+							<cite itemprop="name" class="fn">gian</cite>						</div><!-- .comment-author -->
+
+						<div class="entry-meta comment-metadata">
+							<a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#comment-2540">
+								<time datetime="2020-10-12T11:54:06+02:00" itemprop="datePublished">
+									12th October 2020 at 11:54								</time>
+							</a>
+														<span class="reply">| <a rel='nofollow' class='comment-reply-link' href='#comment-2540' data-commentid="2540" data-postid="909" data-belowelement="div-comment-2540" data-respondelement="respond" data-replyto="Reply to gian" aria-label='Reply to gian'>Reply</a></span>						</div><!-- .comment-metadata -->
+					</div><!-- .comment-author-info -->
+
+									</footer><!-- .comment-meta -->
+
+				<div class="comment-content" itemprop="text">
+					<p>Hi Dani<br />
+Thank you very much for your reply !<br />
+I was meaning , if I program a trajectory from the Raspberry and the raspberry for some reason poweroff or become faulty(or eventually the usb/serial converter is faulty ) the robot continues its trajectory without control.How would be possible in your opinion with a keepalive system on the TX/RX channel to implement this feature ?<br />
+For example an arduino counter   attached to the serial that send a  reset signal to the roomba firmware when ( after a specific amount of time ) there is a specific condition on the signal levels of the serial ?<br />
+Thanks in advance for your advices !</p>
+				</div><!-- .comment-content -->
+			</article><!-- .comment-body -->
+		</li><!-- #comment-## -->
+		</ol><!-- .comment-list -->
+
+			<div id="respond" class="comment-respond">
+		<h3 id="reply-title" class="comment-reply-title">Leave a Comment <small><a rel="nofollow" id="cancel-comment-reply-link" href="/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/#respond" style="display:none;">Cancel reply</a></small></h3><form action="https://domoticproject.com/wp-comments-post.php" method="post" id="commentform" class="comment-form" novalidate><p class="comment-form-comment"><label for="comment" class="screen-reader-text">Comment</label><textarea id="comment" name="comment" cols="45" rows="8" aria-required="true"></textarea></p><label for="author" class="screen-reader-text">Name</label><input placeholder="Name *" id="author" name="author" type="text" value="" size="30" />
+<label for="email" class="screen-reader-text">Email</label><input placeholder="Email *" id="email" name="email" type="email" value="" size="30" />
+<label for="url" class="screen-reader-text">Website</label><input placeholder="Website" id="url" name="url" type="url" value="" size="30" />
+<p class="comment-form-cookies-consent"><input id="wp-comment-cookies-consent" name="wp-comment-cookies-consent" type="checkbox" value="yes" /> <label for="wp-comment-cookies-consent">Save my name, email, and website in this browser for the next time I comment.</label></p>
+<p class="form-submit"><input name="submit" type="submit" id="submit" class="submit" value="Post Comment" /> <input type='hidden' name='comment_post_ID' value='909' id='comment_post_ID' />
+<input type='hidden' name='comment_parent' id='comment_parent' value='0' />
+</p><p style="display: none;"><input type="hidden" id="akismet_comment_nonce" name="akismet_comment_nonce" value="b9fbe7f9a9" /></p><p style="display: none !important;"><label>&#916;<textarea name="ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea></label><input type="hidden" id="ak_js_1" name="ak_js" value="250"/><script>document.getElementById( "ak_js_1" ).setAttribute( "value", ( new Date() ).getTime() );</script></p></form>	</div><!-- #respond -->
+	
+</div><!-- #comments -->
+					</div>
+
+							</main><!-- #main -->
+	</div><!-- #primary -->
+
+	<div id="right-sidebar" class="widget-area grid-25 tablet-grid-25 grid-parent sidebar" itemtype="https://schema.org/WPSideBar" itemscope>
+	<div class="inside-right-sidebar">
+		<aside id="custom_html-3" class="widget_text widget inner-padding widget_custom_html"><h2 class="widget-title">About me</h2><div class="textwidget custom-html-widget"><div style="margin: 20px;"align="center">
+<a href="https://github.com/danimaciasperea/" target="_blank" rel="noopener"><img style="display: inline;margin: 10px;" class="size-full wp-image-297 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/01/GitHub-Logo.png" target="_blank" rel="noopener" alt="GitHub" width="40" height="40" /></a>
+<a href="https://www.linkedin.com/in/danimaciasperea/" target="_blank" rel="noopener"><img style="display: inline;margin: 10px;" class="size-full wp-image-297 aligncenter" src="https://domoticproject.com/wp-content/uploads/2018/01/Linkedin_Logo.png" target="_blank" rel="noopener" alt="LinkedIn" width="40" height="40" /></a></div>
+<p>My name is Dani and I like messing around with everything that has buttons and/or electricity. In this blog I will share my findings building a DIY domotic system based on a Raspberry Pi.</p>
+<p>
+You can contact me under following email address: dani(at)domoticproject.com.</p></div></aside><aside id="search-2" class="widget inner-padding widget_search"><h2 class="widget-title">Search in this site</h2><form method="get" class="search-form" action="https://domoticproject.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" title="Search for:">
+	</label>
+	<input type="submit" class="search-submit" value="Search">
+</form>
+</aside>
+		<aside id="recent-posts-2" class="widget inner-padding widget_recent_entries">
+		<h2 class="widget-title">Recent Posts</h2>
+		<ul>
+											<li>
+					<a href="https://domoticproject.com/controlling-philips-hue-lights-with-raspberry-pi/">Controlling Philips HUE Lights with Raspberry PI</a>
+											<span class="post-date">13th January 2019</span>
+									</li>
+											<li>
+					<a href="https://domoticproject.com/roomberry-surveillance-robot-roomba-raspberry-pi-zero-w-camera/" aria-current="page">Roomberry Surveillance Robot: Roomba + Raspberry Pi Zero W + Camera</a>
+											<span class="post-date">14th August 2018</span>
+									</li>
+											<li>
+					<a href="https://domoticproject.com/controlling-433-mhz-remote-raspberry-pi/">Controlling 433 MHz Remote Switches with Raspberry Pi</a>
+											<span class="post-date">25th June 2018</span>
+									</li>
+											<li>
+					<a href="https://domoticproject.com/updating-fail2ban-and-adding-new-rules/">Updating Fail2ban and adding new rules</a>
+											<span class="post-date">24th June 2018</span>
+									</li>
+											<li>
+					<a href="https://domoticproject.com/configuring-wmr89-weewx/">Configuring WMR89 with weeWX</a>
+											<span class="post-date">14th June 2018</span>
+									</li>
+					</ul>
+
+		</aside><aside id="archives-2" class="widget inner-padding widget_archive"><h2 class="widget-title">Archives</h2>
+			<ul>
+					<li><a href='https://domoticproject.com/2019/01/'>January 2019</a></li>
+	<li><a href='https://domoticproject.com/2018/08/'>August 2018</a></li>
+	<li><a href='https://domoticproject.com/2018/06/'>June 2018</a></li>
+	<li><a href='https://domoticproject.com/2018/05/'>May 2018</a></li>
+	<li><a href='https://domoticproject.com/2018/04/'>April 2018</a></li>
+	<li><a href='https://domoticproject.com/2018/03/'>March 2018</a></li>
+	<li><a href='https://domoticproject.com/2018/02/'>February 2018</a></li>
+	<li><a href='https://domoticproject.com/2018/01/'>January 2018</a></li>
+	<li><a href='https://domoticproject.com/2017/12/'>December 2017</a></li>
+	<li><a href='https://domoticproject.com/2017/11/'>November 2017</a></li>
+			</ul>
+
+			</aside><aside id="categories-2" class="widget inner-padding widget_categories"><h2 class="widget-title">Categories</h2>
+			<ul>
+					<li class="cat-item cat-item-97"><a href="https://domoticproject.com/category/arduino/">Arduino</a>
+</li>
+	<li class="cat-item cat-item-6"><a href="https://domoticproject.com/category/raspberry/basic-configuration/">Basic Configuration</a>
+</li>
+	<li class="cat-item cat-item-22"><a href="https://domoticproject.com/category/raspberry/connectivity/">Connectivity</a>
+</li>
+	<li class="cat-item cat-item-13"><a href="https://domoticproject.com/category/ems-boiler/">EMS Boiler</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="https://domoticproject.com/category/raspberry/miscellany/">Miscellany</a>
+</li>
+	<li class="cat-item cat-item-8"><a href="https://domoticproject.com/category/raspberry/optimization/">Optimization</a>
+</li>
+	<li class="cat-item cat-item-12"><a href="https://domoticproject.com/category/philips-hue/">Philips HUE</a>
+</li>
+	<li class="cat-item cat-item-2"><a href="https://domoticproject.com/category/raspberry/">Raspberry</a>
+</li>
+	<li class="cat-item cat-item-106"><a href="https://domoticproject.com/category/rf-433-mhz/">RF 433 MHz</a>
+</li>
+	<li class="cat-item cat-item-113"><a href="https://domoticproject.com/category/roomba/">Roomba</a>
+</li>
+	<li class="cat-item cat-item-7"><a href="https://domoticproject.com/category/raspberry/security/">Security</a>
+</li>
+	<li class="cat-item cat-item-66"><a href="https://domoticproject.com/category/weather-station/">Weather Station</a>
+</li>
+	<li class="cat-item cat-item-9"><a href="https://domoticproject.com/category/raspberry/web-server/">Web Server</a>
+</li>
+	<li class="cat-item cat-item-11"><a href="https://domoticproject.com/category/weather-station/weewx/">Weewx</a>
+</li>
+	<li class="cat-item cat-item-98"><a href="https://domoticproject.com/category/arduino/wifly/">WiFly</a>
+</li>
+			</ul>
+
+			</aside><aside id="tag_cloud-3" class="widget inner-padding widget_tag_cloud"><h2 class="widget-title">Tags</h2><div class="tagcloud"><a href="https://domoticproject.com/tag/apache2/" class="tag-cloud-link tag-link-78 tag-link-position-1" style="font-size: 12.2pt;" aria-label="apache2 (2 items)">apache2</a>
+<a href="https://domoticproject.com/tag/basic-configuration/" class="tag-cloud-link tag-link-14 tag-link-position-2" style="font-size: 8pt;" aria-label="Basic Configuration (1 item)">Basic Configuration</a>
+<a href="https://domoticproject.com/tag/bind9/" class="tag-cloud-link tag-link-32 tag-link-position-3" style="font-size: 8pt;" aria-label="Bind9 (1 item)">Bind9</a>
+<a href="https://domoticproject.com/tag/buderus/" class="tag-cloud-link tag-link-88 tag-link-position-4" style="font-size: 12.2pt;" aria-label="Buderus (2 items)">Buderus</a>
+<a href="https://domoticproject.com/tag/calduino/" class="tag-cloud-link tag-link-99 tag-link-position-5" style="font-size: 12.2pt;" aria-label="Calduino (2 items)">Calduino</a>
+<a href="https://domoticproject.com/tag/ddclient/" class="tag-cloud-link tag-link-26 tag-link-position-6" style="font-size: 8pt;" aria-label="DDClient (1 item)">DDClient</a>
+<a href="https://domoticproject.com/tag/ddns/" class="tag-cloud-link tag-link-23 tag-link-position-7" style="font-size: 8pt;" aria-label="DDNS (1 item)">DDNS</a>
+<a href="https://domoticproject.com/tag/dmz/" class="tag-cloud-link tag-link-29 tag-link-position-8" style="font-size: 8pt;" aria-label="DMZ (1 item)">DMZ</a>
+<a href="https://domoticproject.com/tag/dns/" class="tag-cloud-link tag-link-24 tag-link-position-9" style="font-size: 12.2pt;" aria-label="DNS (2 items)">DNS</a>
+<a href="https://domoticproject.com/tag/domotic/" class="tag-cloud-link tag-link-108 tag-link-position-10" style="font-size: 12.2pt;" aria-label="domotic (2 items)">domotic</a>
+<a href="https://domoticproject.com/tag/dynamicip/" class="tag-cloud-link tag-link-30 tag-link-position-11" style="font-size: 8pt;" aria-label="DynamicIP (1 item)">DynamicIP</a>
+<a href="https://domoticproject.com/tag/ems-bus/" class="tag-cloud-link tag-link-86 tag-link-position-12" style="font-size: 15pt;" aria-label="EMS bus (3 items)">EMS bus</a>
+<a href="https://domoticproject.com/tag/fail2ban/" class="tag-cloud-link tag-link-38 tag-link-position-13" style="font-size: 12.2pt;" aria-label="Fail2ban (2 items)">Fail2ban</a>
+<a href="https://domoticproject.com/tag/firewall/" class="tag-cloud-link tag-link-36 tag-link-position-14" style="font-size: 8pt;" aria-label="Firewall (1 item)">Firewall</a>
+<a href="https://domoticproject.com/tag/fstab/" class="tag-cloud-link tag-link-40 tag-link-position-15" style="font-size: 8pt;" aria-label="fstab (1 item)">fstab</a>
+<a href="https://domoticproject.com/tag/hostname/" class="tag-cloud-link tag-link-25 tag-link-position-16" style="font-size: 8pt;" aria-label="Hostname (1 item)">Hostname</a>
+<a href="https://domoticproject.com/tag/ifttt/" class="tag-cloud-link tag-link-39 tag-link-position-17" style="font-size: 12.2pt;" aria-label="IFTTT (2 items)">IFTTT</a>
+<a href="https://domoticproject.com/tag/ipchange/" class="tag-cloud-link tag-link-27 tag-link-position-18" style="font-size: 8pt;" aria-label="IPChange (1 item)">IPChange</a>
+<a href="https://domoticproject.com/tag/iptables/" class="tag-cloud-link tag-link-37 tag-link-position-19" style="font-size: 12.2pt;" aria-label="Iptables (2 items)">Iptables</a>
+<a href="https://domoticproject.com/tag/named/" class="tag-cloud-link tag-link-33 tag-link-position-20" style="font-size: 8pt;" aria-label="Named (1 item)">Named</a>
+<a href="https://domoticproject.com/tag/oregon-scientific/" class="tag-cloud-link tag-link-64 tag-link-position-21" style="font-size: 12.2pt;" aria-label="Oregon Scientific (2 items)">Oregon Scientific</a>
+<a href="https://domoticproject.com/tag/portforwarding/" class="tag-cloud-link tag-link-28 tag-link-position-22" style="font-size: 8pt;" aria-label="PortForwarding (1 item)">PortForwarding</a>
+<a href="https://domoticproject.com/tag/power-failure/" class="tag-cloud-link tag-link-45 tag-link-position-23" style="font-size: 8pt;" aria-label="power failure (1 item)">power failure</a>
+<a href="https://domoticproject.com/tag/privatekey/" class="tag-cloud-link tag-link-19 tag-link-position-24" style="font-size: 8pt;" aria-label="privateKey (1 item)">privateKey</a>
+<a href="https://domoticproject.com/tag/putty/" class="tag-cloud-link tag-link-20 tag-link-position-25" style="font-size: 8pt;" aria-label="PuTTY (1 item)">PuTTY</a>
+<a href="https://domoticproject.com/tag/ram/" class="tag-cloud-link tag-link-43 tag-link-position-26" style="font-size: 8pt;" aria-label="RAM (1 item)">RAM</a>
+<a href="https://domoticproject.com/tag/raspberry/" class="tag-cloud-link tag-link-3 tag-link-position-27" style="font-size: 22pt;" aria-label="raspberry (7 items)">raspberry</a>
+<a href="https://domoticproject.com/tag/raspberry-pi/" class="tag-cloud-link tag-link-34 tag-link-position-28" style="font-size: 20.833333333333pt;" aria-label="Raspberry Pi (6 items)">Raspberry Pi</a>
+<a href="https://domoticproject.com/tag/raspbian/" class="tag-cloud-link tag-link-4 tag-link-position-29" style="font-size: 19.2pt;" aria-label="raspbian (5 items)">raspbian</a>
+<a href="https://domoticproject.com/tag/rf/" class="tag-cloud-link tag-link-81 tag-link-position-30" style="font-size: 12.2pt;" aria-label="RF (2 items)">RF</a>
+<a href="https://domoticproject.com/tag/rtc/" class="tag-cloud-link tag-link-62 tag-link-position-31" style="font-size: 12.2pt;" aria-label="RTC (2 items)">RTC</a>
+<a href="https://domoticproject.com/tag/sd-card/" class="tag-cloud-link tag-link-41 tag-link-position-32" style="font-size: 12.2pt;" aria-label="SD Card (2 items)">SD Card</a>
+<a href="https://domoticproject.com/tag/security/" class="tag-cloud-link tag-link-35 tag-link-position-33" style="font-size: 12.2pt;" aria-label="Security (2 items)">Security</a>
+<a href="https://domoticproject.com/tag/service/" class="tag-cloud-link tag-link-48 tag-link-position-34" style="font-size: 15pt;" aria-label="service (3 items)">service</a>
+<a href="https://domoticproject.com/tag/shutdown/" class="tag-cloud-link tag-link-46 tag-link-position-35" style="font-size: 8pt;" aria-label="shutdown (1 item)">shutdown</a>
+<a href="https://domoticproject.com/tag/ssh/" class="tag-cloud-link tag-link-18 tag-link-position-36" style="font-size: 8pt;" aria-label="SSH (1 item)">SSH</a>
+<a href="https://domoticproject.com/tag/staticip/" class="tag-cloud-link tag-link-31 tag-link-position-37" style="font-size: 8pt;" aria-label="StaticIP (1 item)">StaticIP</a>
+<a href="https://domoticproject.com/tag/sudo/" class="tag-cloud-link tag-link-17 tag-link-position-38" style="font-size: 8pt;" aria-label="Sudo (1 item)">Sudo</a>
+<a href="https://domoticproject.com/tag/swap/" class="tag-cloud-link tag-link-42 tag-link-position-39" style="font-size: 8pt;" aria-label="SWAP (1 item)">SWAP</a>
+<a href="https://domoticproject.com/tag/upsd/" class="tag-cloud-link tag-link-44 tag-link-position-40" style="font-size: 8pt;" aria-label="upsd (1 item)">upsd</a>
+<a href="https://domoticproject.com/tag/user-configuration/" class="tag-cloud-link tag-link-16 tag-link-position-41" style="font-size: 8pt;" aria-label="User configuration (1 item)">User configuration</a>
+<a href="https://domoticproject.com/tag/weewx/" class="tag-cloud-link tag-link-59 tag-link-position-42" style="font-size: 17.333333333333pt;" aria-label="weewx (4 items)">weewx</a>
+<a href="https://domoticproject.com/tag/wifi-configuration/" class="tag-cloud-link tag-link-15 tag-link-position-43" style="font-size: 8pt;" aria-label="WiFi Configuration (1 item)">WiFi Configuration</a>
+<a href="https://domoticproject.com/tag/winscp/" class="tag-cloud-link tag-link-21 tag-link-position-44" style="font-size: 8pt;" aria-label="WinSCP (1 item)">WinSCP</a>
+<a href="https://domoticproject.com/tag/wmr88/" class="tag-cloud-link tag-link-63 tag-link-position-45" style="font-size: 12.2pt;" aria-label="WMR88 (2 items)">WMR88</a></div>
+</aside>	</div><!-- .inside-right-sidebar -->
+</div><!-- #secondary -->
+
+	</div><!-- #content -->
+</div><!-- #page -->
+
+
+<div class="site-footer">
+			<footer class="site-info" itemtype="https://schema.org/WPFooter" itemscope>
+			<div class="inside-site-info grid-container grid-parent">
+								<div class="copyright-bar">
+					&copy; 2023 DomoticProject.com				</div>
+			</div>
+		</footer><!-- .site-info -->
+		</div><!-- .site-footer -->
+
+<script type='text/javascript' id='toc-front-js-extra'>
+/* <![CDATA[ */
+var tocplus = {"smooth_scroll":"1","visibility_show":"show","visibility_hide":"hide","width":"Auto"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/table-of-contents-plus/front.min.js?ver=2302' id='toc-front-js'></script>
+<!--[if lte IE 11]>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/themes/generatepress/js/classList.min.js?ver=2.3.2' id='generate-classlist-js'></script>
+<![endif]-->
+<script type='text/javascript' src='https://domoticproject.com/wp-content/themes/generatepress/js/menu.min.js?ver=2.3.2' id='generate-menu-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/themes/generatepress/js/a11y.min.js?ver=2.3.2' id='generate-a11y-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-includes/js/comment-reply.min.js?ver=5.6.10' id='comment-reply-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/gp-premium/secondary-nav/functions/js/navigation.min.js?ver=1.2.94' id='generate-secondary-nav-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-includes/js/wp-embed.min.js?ver=5.6.10' id='wp-embed-js'></script>
+<script defer type='text/javascript' src='https://domoticproject.com/wp-content/plugins/akismet/_inc/akismet-frontend.js?ver=1683650868' id='akismet-frontend-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/simple-lightbox/client/js/prod/lib.core.js?ver=2.9.3' id='slb_core-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/simple-lightbox/client/js/prod/lib.view.js?ver=2.9.3' id='slb_view-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/simple-lightbox/themes/baseline/js/prod/client.js?ver=2.9.3' id='slb-asset-slb_baseline-base-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/simple-lightbox/themes/default/js/prod/client.js?ver=2.9.3' id='slb-asset-slb_default-base-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/simple-lightbox/template-tags/item/js/prod/tag.item.js?ver=2.9.3' id='slb-asset-item-base-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/simple-lightbox/template-tags/ui/js/prod/tag.ui.js?ver=2.9.3' id='slb-asset-ui-base-js'></script>
+<script type='text/javascript' src='https://domoticproject.com/wp-content/plugins/simple-lightbox/content-handlers/image/js/prod/handler.image.js?ver=2.9.3' id='slb-asset-image-base-js'></script>
+<script type="text/javascript" id="slb_footer">/* <![CDATA[ */if ( !!window.jQuery ) {(function($){$(document).ready(function(){if ( !!window.SLB && SLB.has_child('View.init') ) { SLB.View.init({"ui_autofit":true,"ui_animate":true,"slideshow_autostart":true,"slideshow_duration":"6","group_loop":true,"ui_overlay_opacity":"0.8","ui_title_default":false,"theme_default":"slb_default","ui_labels":{"loading":"Loading","close":"Close","nav_next":"Next","nav_prev":"Previous","slideshow_start":"Start slideshow","slideshow_stop":"Stop slideshow","group_status":"Item %current% of %total%"}}); }
+if ( !!window.SLB && SLB.has_child('View.assets') ) { {$.extend(SLB.View.assets, {"1336671183":{"id":914,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/RoombaMiniDINConnection.png","title":"RoombaMiniDINConnection","caption":"Roomba Mini DIN Connection","description":"Roomba Mini DIN Connection"},"1809960448":{"id":917,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/5PinCable.jpg","title":"5 Pin female cable","caption":"Detail of the 5 Pin female cable used to communicate with Roomba mini DIN 7 connector","description":""},"2089430216":{"id":954,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Roomberry-5Pin-MiniDIN7-Cable.jpg","title":"Roomberry-5Pin-MiniDIN7-Cable","caption":"Roomberry 5Pin MiniDIN7 Cable","description":""},"220685790":{"id":916,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Roomba_700_BatteryPack.jpg","title":"Roomba 700 Battery Access","caption":"Detail of the battery access in Roomba 700\/800 motherboard","description":""},"1833347520":{"id":918,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Roomba_700_BatteryAccess.jpg","title":"Roomba 700 Battery Access","caption":"","description":""},"274939663":{"id":919,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Roomba_StepDown_Converter.jpg","title":"Roomba StepDown Converter","caption":"Detail of the placement of the step down used D24V5F5","description":""},"103144536":{"id":920,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Roomba_USB5V_Cable-e1533569911328.jpg","title":"Roomba micro USB 5V Cable","caption":"","description":""},"99372065":{"id":921,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Roomba_USB5V_Cable2.jpg","title":"Roomba micro USB 5V Cable","caption":"","description":""},"162184801":{"id":946,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/RoombaOIModes.png","title":"Roomba OI Modes","caption":"Roomba OI Modes","description":""},"863369815":{"id":928,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/RaspberryPiZeroW.png","title":"Raspberry Pi Zero W","caption":"Raspberry Pi Zero W","description":""},"779104291":{"id":930,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Camera_Module_Raspberry_Pi_Zero_Wide_Angle.jpg","title":"Camera_Module_Raspberry_Pi_Zero_Wide_Angle","caption":"Camera Module Raspberry Pi Zero Wide Angle","description":""},"1569295088":{"id":938,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/PCB_Roomberry.png","title":"PCB Roomberry","caption":"PCB Roomberry","description":""},"416096649":{"id":931,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Roofino_Roomba_RaspberryPiZeroW_Camera.jpg","title":"Roofino Roomba Raspberry Pi Zero W Camera","caption":"Roofino Roomba Raspberry Pi Zero W Camera","description":""},"366689528":{"id":932,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Roofino_Roomba_RaspberryPiZeroW_Camera2.jpg","title":"Roofino Roomba Raspberry Pi Zero W Camera 2","caption":"Roofino Roomba Raspberry Pi Zero W Camera 2","description":""},"1992241462":{"id":956,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Roomberry-Front-View.jpg","title":"Roomberry Front View","caption":"Roomberry-Front-View","description":""},"1141673509":{"id":933,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Roofino_Roomba_RaspberryPiZeroW_Camera3.jpg","title":"Roofino Roomba Raspberry Pi Zero W Camera 3","caption":"Roofino Roomba Raspberry Pi Zero W Camera 3","description":""},"998053205":{"id":944,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Minicom_Roomba_output.png","title":"Minicom Roomba output","caption":"Minicom Roomba output","description":""},"435914628":{"id":952,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Roomba_Firmware.png","title":"Roomba Firmware","caption":"Roomba Firmware","description":""},"1947529289":{"id":959,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Screen-capture-WebInterface-Roomberry.png","title":"Screen Capture Web Interface Roomberry Roomba Raspberry Camera","caption":"Screen Capture Web Interface Roomberry Roomba Raspberry Camera","description":""},"910084609":{"id":965,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/Roomba_Web_Interface_Directions_Control.png","title":"Roomba Web Interface Directions Control","caption":"Roomba Web Interface Directions Control","description":""},"637159946":{"id":966,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/RoombaSongEditorModal.png","title":"Roomba Song Editor Modal","caption":"Roomba Song Editor Modal","description":""},"641648491":{"id":967,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/RoombaStatus.png","title":"Roomba Web Interface Status","caption":"Roomba Web Interface Status","description":""},"61389817":{"id":968,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/PiCameraWebControl.png","title":"Pi Camera Web Control","caption":"Pi Camera Web Control","description":""},"768866136":{"id":969,"type":"image","internal":true,"source":"https:\/\/domoticproject.com\/wp-content\/uploads\/2018\/08\/PiCameraRecordCaptureControl.png","title":"Picamera Record Capture Control","caption":"Picamera  Record Capture Control","description":""}});} }
+/* THM */
+if ( !!window.SLB && SLB.has_child('View.extend_theme') ) { SLB.View.extend_theme('slb_baseline',{"name":"Baseline","parent":"","styles":[{"handle":"base","uri":"https:\/\/domoticproject.com\/wp-content\/plugins\/simple-lightbox\/themes\/baseline\/css\/style.css","deps":[]}],"layout_raw":"<div class=\"slb_container\"><div class=\"slb_content\">{{item.content}}<div class=\"slb_nav\"><span class=\"slb_prev\">{{ui.nav_prev}}<\/span><span class=\"slb_next\">{{ui.nav_next}}<\/span><\/div><div class=\"slb_controls\"><span class=\"slb_close\">{{ui.close}}<\/span><span class=\"slb_slideshow\">{{ui.slideshow_control}}<\/span><\/div><div class=\"slb_loading\">{{ui.loading}}<\/div><\/div><div class=\"slb_details\"><div class=\"inner\"><div class=\"slb_data\"><div class=\"slb_data_content\"><span class=\"slb_data_title\">{{item.title}}<\/span><span class=\"slb_group_status\">{{ui.group_status}}<\/span><div class=\"slb_data_desc\">{{item.description}}<\/div><\/div><\/div><div class=\"slb_nav\"><span class=\"slb_prev\">{{ui.nav_prev}}<\/span><span class=\"slb_next\">{{ui.nav_next}}<\/span><\/div><\/div><\/div><\/div>"}); }if ( !!window.SLB && SLB.has_child('View.extend_theme') ) { SLB.View.extend_theme('slb_default',{"name":"Default (Light)","parent":"slb_baseline","styles":[{"handle":"base","uri":"https:\/\/domoticproject.com\/wp-content\/plugins\/simple-lightbox\/themes\/default\/css\/style.css","deps":[]}]}); }})})(jQuery);}/* ]]> */</script>
+<script type="text/javascript" id="slb_context">/* <![CDATA[ */if ( !!window.jQuery ) {(function($){$(document).ready(function(){if ( !!window.SLB ) { {$.extend(SLB, {"context":["public","user_guest"]});} }})})(jQuery);}/* ]]> */</script>
+
+</body>
+</html>
+
+<!-- Dynamic page generated in 0.295 seconds. -->
+<!-- Cached page generated by WP-Super-Cache on 2023-05-09 19:01:45 -->
+
+<!-- Compression = gzip -->
