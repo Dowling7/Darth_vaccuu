@@ -122,6 +122,11 @@ A **Raspberry Pi 2** serves as a backup, supporting **Ubuntu 22.04 LTS** and **R
 - **Wheel Encoders:** Tracks movement and distance traveled.
 - **Battery & Charging Sensors:** Monitors battery levels and docking status.
 
+<p align="center">
+  <img src="doc/img/RoombaMiniDIN.png" alt="Robot Image" width="400">
+</p>
+Please notice, all the communication between processor and roomba 865 chasis will thought this 7-pin mini-din port. The pwr of this mini DIN is directly connected to 14V battery pack output, potentiall cause permanent damage to the processor.
+
 ### 2.3. Software
 ```
 ├── ConvertedMarkdown.md
